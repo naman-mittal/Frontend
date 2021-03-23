@@ -1,23 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
+import VerticalTabs from './components/VerticalTabs';
+import ButtonAppBar from './components/ButtonAppBar';
+import Drawer from './components/MainDrawer'
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+    <Drawer/>
     </div>
   );
 }
