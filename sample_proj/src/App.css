@@ -35,7 +35,15 @@
 
 .MuiListItemText-primary
 {
-  color : black;
+  color : black; 
+}
+
+
+.edit-icon{
+  display : flex;
+  float : right;
+  color:black;
+  background-color: green;
 }
 
 @keyframes App-logo-spin {

@@ -13,7 +13,6 @@ import TodayIcon from '@material-ui/icons/Today';
 import DomainIcon from '@material-ui/icons/Domain';
 import FaceIcon from '@material-ui/icons/Face';
 import DataItem from './DataItem'
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import { useSelector , useDispatch } from 'react-redux';
 import * as actions from '../actions/user'
 import UserImg from './UserImg'
@@ -35,6 +34,14 @@ const useStyles = makeStyles((theme) => ({
   list:{
       marginBottom : 0,
   },
+  icon:{
+        height : 30,
+        width : 30,
+  },
+  heading:{
+      fontSize:18,
+      color : theme.palette.primary.dark,
+  }
 }));
 
 export default function DataGrid(props) {
@@ -46,7 +53,7 @@ export default function DataGrid(props) {
 
     useEffect(() => {
 
-        dispatch(actions.fetchUser(1))
+        dispatch(actions.fetchUser(7))
     
       },[]);
 
@@ -76,7 +83,7 @@ export default function DataGrid(props) {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6} md={4} lg={4}>
           <Paper className={classes.paper}>
-              Personal Details <PersonIcon className={classes.right}/>
+             <span className={classes.heading}> Personal Details </span> <PersonIcon className={classes.right}/>
               <List className={classes.list}>
               <DataItem icon={<AccountCircleIcon/>} title='Name' value={user.empName}></DataItem>
               <DataItem icon={<MailOutlineIcon/>} title='Email' value={user.empEmailId}></DataItem>
@@ -87,19 +94,19 @@ export default function DataGrid(props) {
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={4}>
           <Paper className={classes.paper}>
-              Work Details <WorkIcon className={classes.right}/>
+          <span className={classes.heading}> Work Details </span> <WorkIcon className={classes.right}/>
               <List className={classes.list}>
               <DataItem icon={<AssignmentIndIcon/>} title='Designation' value={user.empDesignation}></DataItem>
               <DataItem icon={<DomainIcon/>} title='Domain' value={user.empDomain}></DataItem>
               <DataItem icon={<AssignmentIndIcon/>} title='Role' value={user.loginDetails.role}></DataItem>
               <DataItem icon={<TodayIcon/>} title='DOJ' value={user.empDOJ}></DataItem>
-              <DataItem icon={<AttachMoneyIcon/>} title='Salary' value={user.empSalary}></DataItem>
+              <DataItem icon={<img className={classes.icon} alt='R' src='img_ruppee.png'/>} title='Salary' value={user.empSalary}></DataItem>
               </List>
               </Paper>
         </Grid>
         <Grid item xs={12} sm={6} md={4} lg={4}>
           <Paper className={classes.paper}>
-              Login Details <VpnKeyIcon className={classes.right}/>
+          <span className={classes.heading}> Login Details </span> <VpnKeyIcon className={classes.right}/>
               <List className={classes.list}>
               <DataItem icon={<FaceIcon/>} title='Username' value={user.loginDetails.userName}></DataItem>
               </List>

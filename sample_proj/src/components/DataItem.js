@@ -1,23 +1,30 @@
-import React from 'react';
-import { makeStyles  } from '@material-ui/core/styles';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    width: "100%",
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
   },
-  icon:{
-      fontSize : 'large',
+  icon: {
+    fontSize: "large",
   },
-  item:{
-    padding : 0,
+  item: {
+    padding: 0,
   },
-  
+  primary: {
+      fontSize : 12,
+    color: "gray",
+  },
+  secondary: {
+    color: "black",
+    fontSize : 16,
+    fontWeight : 'bold',
+  },
 }));
 
 // const theme = createMuiTheme({
@@ -37,15 +44,16 @@ export default function FolderList(props) {
   const classes = useStyles();
 
   return (
-   
-      <ListItem className={classes.item}>
-        <ListItemAvatar className={classes.icon}>
-          
-            {props.icon}
-         
-        </ListItemAvatar>
-        <ListItemText primary={props.title} secondary={props.value} />
-      </ListItem>
-      
+    <ListItem className={classes.item}>
+      <ListItemAvatar className={classes.icon}>{props.icon}</ListItemAvatar>
+      <ListItemText
+        classes={{
+          primary: classes.primary, // class name, e.g. `classes-nesting-root-x`
+          secondary: classes.secondary, // class name, e.g. `classes-nesting-label-x`
+        }}
+        primary={props.title}
+        secondary={props.value}
+      />
+    </ListItem>
   );
 }
