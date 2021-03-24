@@ -1,25 +1,19 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme , ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import MailIcon from '@material-ui/icons/Mail';
-import { Autorenew } from '@material-ui/icons';
 import {BrowserRouter as Router,Link,Route,Switch} from 'react-router-dom'
 import MainDashboard from './MainDashboard';
 import Profile from './Profile';
@@ -90,16 +84,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MainDrawer() {
   const classes = useStyles();
-  const theme = useTheme();
+  //const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+  // const handleDrawerOpen = () => {
+  //   setOpen(true);
+  // };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  // const handleDrawerClose = () => {
+  //   setOpen(false);
+  // };
 
   const handleDrawer = () =>{
 
