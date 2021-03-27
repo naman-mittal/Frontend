@@ -1,19 +1,23 @@
-import React, { Component } from 'react'
+import React from 'react'
 import DataGrid from './DataGrid'
 import EditBtn from './EditBtn'
+import {Link,useRouteMatch} from 'react-router-dom'
 
-export default class Profile extends Component {
+
+export default function Profile(){
+
+    let { path, url } = useRouteMatch();
 
     
-
-    render() {
 
         return (
             <div className='profile'>
                 
                 <DataGrid></DataGrid>
+                <Link to={`${url}/edit`}>
                 <EditBtn></EditBtn>
+                </Link>
             </div>
         )
-    }
+    
 }

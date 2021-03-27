@@ -16,6 +16,9 @@ import DataItem from './DataItem'
 import { useSelector , useDispatch } from 'react-redux';
 import * as actions from '../actions/user'
 import UserImg from './UserImg'
+import ruppee from '../images/img_ruppee.png'
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,17 +50,20 @@ const useStyles = makeStyles((theme) => ({
 export default function DataGrid(props) {
  
     const user = useSelector(state => state.user)
+
     const dispatch = useDispatch();  
   
     const classes = useStyles();
 
     useEffect(() => {
 
-        dispatch(actions.fetchUser(7))
+      let loginUser = JSON.parse(localStorage.getItem('user'));
+      if(loginUser)
+        dispatch(actions.fetchUser(loginUser.id))
     
       },[]);
 
-    if(user.loginDetails===undefined)
+    if(user===undefined || user.loginDetails===undefined)
     {
         return(
             <h1>No data</h1>
@@ -81,30 +87,30 @@ export default function DataGrid(props) {
         <UserImg initials={user.empName.split(" ")[0][0]+user.empName.split(" ")[1][0]}></UserImg>
                 <br/>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6} md={4} lg={4}>
+        <Grid item xs={12} sm={10} md={6} lg={4} xl={4}>
           <Paper className={classes.paper}>
              <span className={classes.heading}> Personal Details </span> <PersonIcon className={classes.right}/>
               <List className={classes.list}>
               <DataItem icon={<AccountCircleIcon/>} title='Name' value={user.empName}></DataItem>
               <DataItem icon={<MailOutlineIcon/>} title='Email' value={user.empEmailId}></DataItem>
-              <DataItem icon={<AssignmentIndIcon/>} title='PAN' value={user.empPAN}></DataItem>
-              <DataItem icon={<TodayIcon/>} title='DOB' value={user.empDOB}></DataItem>
+              <DataItem icon={<AssignmentIndIcon/>} title='PAN' value={user.empPAN?user.empPAN:'---'}></DataItem>
+              <DataItem icon={<TodayIcon/>} title='DOB' value={user.empDOB?user.empDOB:'---'}></DataItem>
               </List>
           </Paper>
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={4}>
+        <Grid item xs={12} sm={10} md={6} lg={4} xl={4}>
           <Paper className={classes.paper}>
           <span className={classes.heading}> Work Details </span> <WorkIcon className={classes.right}/>
               <List className={classes.list}>
-              <DataItem icon={<AssignmentIndIcon/>} title='Designation' value={user.empDesignation}></DataItem>
-              <DataItem icon={<DomainIcon/>} title='Domain' value={user.empDomain}></DataItem>
-              <DataItem icon={<AssignmentIndIcon/>} title='Role' value={user.loginDetails.role}></DataItem>
-              <DataItem icon={<TodayIcon/>} title='DOJ' value={user.empDOJ}></DataItem>
-              <DataItem icon={<img className={classes.icon} alt='R' src='img_ruppee.png'/>} title='Salary' value={user.empSalary}></DataItem>
+              <DataItem icon={<AssignmentIndIcon/>} title='Designation' value={user.empDesignation?user.empDesignation:'---'}></DataItem>
+              <DataItem icon={<DomainIcon/>} title='Domain' value={user.empDomain?user.empDomain:'---'}></DataItem>
+              <DataItem icon={<AssignmentIndIcon/>} title='Role' value={user.loginDetails.role?user.loginDetails.role:'---'}></DataItem>
+              <DataItem icon={<TodayIcon/>} title='DOJ' value={user.empDOJ?user.empDOJ:'---'}></DataItem>
+              <DataItem icon={<img className={classes.icon} alt='R' src={ruppee}/>} title='Salary' value={user.empSalary?user.empSalary:'---'}></DataItem>
               </List>
               </Paper>
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={4}>
+        <Grid item xs={12} sm={10} md={6} lg={4}>
           <Paper className={classes.paper}>
           <span className={classes.heading}> Login Details </span> <VpnKeyIcon className={classes.right}/>
               <List className={classes.list}>

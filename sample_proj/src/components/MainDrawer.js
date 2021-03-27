@@ -1,32 +1,41 @@
-import React from 'react';
-import clsx from 'clsx';
-import { makeStyles} from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import CloseIcon from '@material-ui/icons/Close';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import DashboardIcon from '@material-ui/icons/Dashboard'
-import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import {BrowserRouter as Router,Link,Route,Switch} from 'react-router-dom'
-import MainDashboard from './MainDashboard';
-import Profile from './Profile';
+import React,{useEffect} from "react";
+import clsx from "clsx";
+import { useDispatch } from 'react-redux'
+import { makeStyles } from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import Button from '@material-ui/core/Button';
+import MenuIcon from "@material-ui/icons/Menu";
+import CloseIcon from "@material-ui/icons/Close";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import {  Link, Switch , useRouteMatch,Route, useLocation } from "react-router-dom";
+import MainDashboard from "./MainDashboard";
+import Profile from "./Profile";
+import Tabs from "@material-ui/core/Tabs";
+import * as actions from '../actions/user'
+import PrivateRoute from './PrivateRoute'
+import NoMatch from './NoMatch'
+import EditUser from "./EditUser";
 
-const drawerWidth = 240;
+
+
+const drawerWidth = 180;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -34,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -43,49 +52,128 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   hide: {
-    display: 'none',
+    display: "none",
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-   
+    [theme.breakpoints.down("xs")]: {
+      width: drawerWidth - 130,
+    },
   },
   drawertabs: {
-    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
   },
   drawerPaper: {
     width: drawerWidth,
+    [theme.breakpoints.down("xs")]: {
+      width: drawerWidth - 130,
+    },
   },
   drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: -drawerWidth,
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: -(drawerWidth - 120),
+    },
   },
   contentShift: {
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
     marginLeft: 0,
+    [theme.breakpoints.down("xs")]: {
+      width: drawerWidth - 130,
+    },
+  },
+
+  itemText: {
+    [theme.breakpoints.down("xs")]: {
+      display: "none",
+    },
+  },
+  logoutBtn: {
+    position:'fixed',
+    color : 'white',
+    fontWeight:'bold',
+    right:10,
+    top : 15,
   },
 }));
 
 export default function MainDrawer() {
+
+  let { path, url } = useRouteMatch();
+  let location = useLocation()
+
+  console.log("path = " + path)
+  console.log("url = "+url)
+
   const classes = useStyles();
   //const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
+  const [value, setValue] = React.useState(0);
+
+  useEffect(() => {
+
+    console.log("inside effect")
+
+    if(location.pathname==="/home")
+    {
+      console.log('"setting value to home')
+      setValue(0)
+    }
+    
+    else if(location.pathname==="/home/profile")
+    {
+      console.log('"setting value toprofile')
+      setValue(1)
+    }
+    else
+    {
+      console.log(url)
+    }
+  
+    console.log("outside effect")
+
+    },[]);
+
+
+  
+  
+
+  const dispatch = useDispatch()
+
+  const handleChange = (newValue) => {
+    console.log(newValue)
+    if(newValue===undefined)
+    setValue(0);
+    else
+    setValue(newValue);
+  };
+
+  const handleLogout = () =>{
+
+        
+
+    dispatch(actions.logout())
+
+}
 
   // const handleDrawerOpen = () => {
   //   setOpen(true);
@@ -95,63 +183,61 @@ export default function MainDrawer() {
   //   setOpen(false);
   // };
 
-  const handleDrawer = () =>{
+  const handleDrawer = () => {
+    setOpen(!open);
+  };
 
-    setOpen(!open)
-
-  }
 
   return (
-    <Router>
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        // className={clsx(classes.appBar, {
-        //   [classes.appBarShift]: open,
-        // })}
-        className = {classes.appBar}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawer}
-            edge="start"
-            // className={clsx(classes.menuButton, open && classes.hide)}
-            className={classes.menuButton}
-          >
-            { open?<CloseIcon />:<MenuIcon/>}
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Expense Manager
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        {/* <div className={classes.drawerHeader}>
+    
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          // className={clsx(classes.appBar, {
+          //   [classes.appBarShift]: open,
+          // })}
+          className={classes.appBar}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawer}
+              edge="start"
+              // className={clsx(classes.menuButton, open && classes.hide)}
+              className={classes.menuButton}
+            >
+              {open ? <CloseIcon /> : <MenuIcon />}
+            </IconButton>
+            <Typography variant="h6" >
+              Expense Manager
+            </Typography>
+           <Link to='/signin' className="router-lnk"><Button color="inherit" className={classes.logoutBtn} onClick={handleLogout}>Logout</Button></Link> 
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          className={classes.drawer}
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          {/* <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </div> */}
-        {/* <Divider /> */}
-        <div className={classes.drawerHeader} />
-        
-        
+          {/* <Divider /> */}
+          <div className={classes.drawerHeader} />
 
-        <Link to="/" className='router-lnk'>
+          {/* <Link to="/" className='router-lnk'>
 
-        <ListItem button className='drawertabs'>
+        <ListItem button className={`drawertabs ${classes.active}`} onClick={handleClick}>
               <ListItemIcon><DashboardIcon /></ListItemIcon>
-              <ListItemText primary={'Dashboard'} />
+              <ListItemText className={classes.itemText} primary={'Dashboard'} />
             </ListItem>
 
         </Link>
@@ -160,12 +246,56 @@ export default function MainDrawer() {
 
         <ListItem button className='drawertabs'>
               <ListItemIcon><AccountCircleIcon /></ListItemIcon>
-              <ListItemText primary={'View Profile'} />
+              <ListItemText className={classes.itemText} primary={'View Profile'} />
             </ListItem>
 
-        </Link>
+        </Link> */}
 
-        {/* <List> 
+          <Tabs
+            value={value}
+            orientation="vertical"
+            variant="fullWidth"
+            indicatorColor="primary"
+            textColor="primary"
+            aria-label="icon label tabs example"
+          >
+            <Link to={`${url}`} className="router-lnk">
+            <ListItem
+              button
+              className={`drawertabs ${classes.active}`}
+              onClick={()=> handleChange(0)}
+            >
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText
+                className={classes.itemText}
+                primary={"Dashboard"}
+              />
+            </ListItem>
+          </Link>
+            
+          <Link to={`${url}/profile`} className="router-lnk">
+            <ListItem button className="drawertabs"
+            onClick={()=> handleChange(1)}
+            >
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText
+                className={classes.itemText}
+                primary={"View Profile"}
+              />
+            </ListItem>
+          </Link>
+
+          </Tabs>
+
+         
+
+          
+
+          {/* <List> 
           {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem button key={text} className='drawertabs'>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
@@ -182,33 +312,34 @@ export default function MainDrawer() {
             </ListItem>
           ))}
         </List> */}
-        
-      </Drawer>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
-      >
-        <div className={classes.drawerHeader} />
-        
-        <Switch>
+        </Drawer>
+        <main
+          className={clsx(classes.content, {
+            [classes.contentShift]: open,
+          })}
+        >
+          <div className={classes.drawerHeader} />
 
-        <Route path="/profile">
-          <Profile></Profile>
+          <Switch>
+            {/* <Route path="/profile">
+              <Profile></Profile>
+            </Route> */}
+            <PrivateRoute component={Profile} path={`${path}/profile`} exact/>
+
+            <PrivateRoute component={EditUser} path={`${path}/profile/edit`} exact/>
+
+            {/* <Route path="/dashboard">
+              <MainDashboard></MainDashboard>
+            </Route> */}
+            <PrivateRoute component={MainDashboard} path={path} exact />
+            
+            <Route path="*">
+            <NoMatch/>
           </Route>
 
-          <Route path="/">
-          <MainDashboard></MainDashboard>
-          </Route>
-
-          
-
-        </Switch>
-
-        
-        
-      </main>
-    </div>
-    </Router>
+          </Switch>
+        </main>
+      </div>
+   
   );
 }

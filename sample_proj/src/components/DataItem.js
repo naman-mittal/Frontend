@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   secondary: {
     color: "black",
-    fontSize : 16,
+    fontSize : 'calc(0.75vw + 0.75vh + 0.25vmin)',
     fontWeight : 'bold',
   },
 }));
