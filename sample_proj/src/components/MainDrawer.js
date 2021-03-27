@@ -16,7 +16,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import {  Link, Switch , useRouteMatch,Route, useLocation } from "react-router-dom";
+import {  Link, Switch , useRouteMatch,Route, useLocation, useHistory } from "react-router-dom";
 import MainDashboard from "./MainDashboard";
 import Profile from "./Profile";
 import Tabs from "@material-ui/core/Tabs";
@@ -24,6 +24,7 @@ import * as actions from '../actions/user'
 import PrivateRoute from './PrivateRoute'
 import NoMatch from './NoMatch'
 import EditUser from "./EditUser";
+import Modal from '@material-ui/core/Modal';
 
 
 
@@ -113,12 +114,30 @@ const useStyles = makeStyles((theme) => ({
     right:10,
     top : 15,
   },
+  paper: {
+    position: 'absolute',
+    width: 400,
+    color : 'white',
+    backgroundColor: 'black',
+    //border: '2px solid #000',
+   // boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  },
+ default:{
+    color : 'grey',
+  
+  },
 }));
 
 export default function MainDrawer() {
 
   let { path, url } = useRouteMatch();
   let location = useLocation()
+
+  const history = useHistory()
 
   console.log("path = " + path)
   console.log("url = "+url)
@@ -128,6 +147,8 @@ export default function MainDrawer() {
   const [open, setOpen] = React.useState(false);
 
   const [value, setValue] = React.useState(0);
+
+  const [openM, setOpenM] = React.useState(false);
 
   useEffect(() => {
 
@@ -167,11 +188,18 @@ export default function MainDrawer() {
     setValue(newValue);
   };
 
+  const openModal = () =>{
+    setOpenM(true)
+  }
+
   const handleLogout = () =>{
 
         
 
     dispatch(actions.logout())
+
+    history.push('/signin')
+
 
 }
 
@@ -187,6 +215,23 @@ export default function MainDrawer() {
     setOpen(!open);
   };
 
+  const handleClose = ()=>{
+    console.log("closing modal...")
+    setOpenM(false)
+  }
+
+  const body = (
+    <div  className={classes.paper}>
+      <h2 id="simple-modal-title">Logout</h2>
+      <p id="simple-modal-description">
+       Are you sure you want to logout?
+      </p>
+      <Button variant="contained"  onClick={handleLogout}><strong>Okay</strong></Button>
+      <Button className={classes.default} onClick={handleClose}>Cancel</Button>
+    </div>
+  );
+
+  
 
   return (
     
@@ -213,7 +258,16 @@ export default function MainDrawer() {
             <Typography variant="h6" >
               Expense Manager
             </Typography>
-           <Link to='/signin' className="router-lnk"><Button color="inherit" className={classes.logoutBtn} onClick={handleLogout}>Logout</Button></Link> 
+           <Button color="inherit" className={classes.logoutBtn} onClick={openModal}>Logout</Button>
+           <Modal
+           className = {classes.modal}
+        open={openM}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        {body}
+      </Modal>
           </Toolbar>
         </AppBar>
         <Drawer
