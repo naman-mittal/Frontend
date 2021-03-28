@@ -17,6 +17,8 @@ import { useSelector , useDispatch } from 'react-redux';
 import * as actions from '../actions/user'
 import UserImg from './UserImg'
 import ruppee from '../images/img_ruppee.png'
+import EditBtn from './EditBtn'
+import {Link,useRouteMatch} from 'react-router-dom'
 
 
 
@@ -48,6 +50,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function DataGrid(props) {
+
+   let { path, url } = useRouteMatch();
  
     const user = useSelector(state => state.user)
 
@@ -120,6 +124,9 @@ export default function DataGrid(props) {
         </Grid>
         
       </Grid>
+       <Link to={`${url}/edit`}>
+                <EditBtn user={user}></EditBtn>
+                </Link>
     </div>
   );
 }

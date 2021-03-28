@@ -7,8 +7,8 @@ const initialState = loginUser
 const reducer = (state = initialState, { type, payload }) => {
   console.log(type);
   switch (type) {
-    case "FIND_USERS":
-      return { users: payload, message: "" };
+    case "FIND_Employees":
+      return { employees: payload.employees, message: "" };
 
     case "LOGIN_SUCCESS":
       return {

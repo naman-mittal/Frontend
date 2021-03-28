@@ -19,6 +19,16 @@ export default function EditUser() {
       
         },[]);
 
+    if(user===undefined)
+    {
+      return(
+        <h1>
+        Loading....
+        </h1>
+      )
+    }
+
+
     return (
         <div>
             <h1>Edit page {user?user.empName:'No data'}</h1>

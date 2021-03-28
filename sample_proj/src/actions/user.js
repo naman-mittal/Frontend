@@ -1,3 +1,6 @@
+import {history} from '../helpers/history'
+
+
 const findUser = (user) =>{
     return {type : "FIND_USER",payload : {user}}
 }
@@ -32,6 +35,43 @@ export const fetchUser = (id) => {
     }
 
 }
+
+
+const findEmployees = (employees) =>{
+    return {type : "FIND_Employees",payload : {employees}}
+}
+
+export const fetchEmployees = () => {
+
+    //console.log("fetch user... id = " + id)
+    let user = JSON.parse(localStorage.getItem('user'));
+    console.log(user)
+
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json',
+    
+        'Authorization': 'Bearer ' + user.accessToken
+
+    }
+    };
+    return dispatch => {
+        fetch('http://localhost:8080/api/v1/employees', requestOptions)
+            .then(res => {
+                console.log(res);
+                return res.json();
+            })
+            .then(data => {
+                console.log(data);
+                dispatch(findEmployees(data));
+            }).catch((error) => {
+                console.error('Error:', error);
+              });
+
+    }
+
+}
+
 
 export const signin = (user) =>{
     return {type : "LOGIN_SUCCESS",payload : {user}}
@@ -73,8 +113,10 @@ export const login = (username,password) => {
                 
                     console.log("no error")
                     localStorage.setItem('user',JSON.stringify(user))
-
+                    //history.push('/')
                 dispatch(signin(user));
+
+                
                 
                 
             })

@@ -4,6 +4,7 @@ import Signin from "./components/Signin";
 import Signup from './components/Signup'
 import PrivateRoute from "./components/PrivateRoute";
 import PublicRoute from "./components/PublicRoute";
+import {history} from './helpers/history'
 import {
   BrowserRouter as Router,
   Switch,
@@ -39,9 +40,9 @@ function App() {
           <PublicRoute restricted={true} component={Signup} path="/signup" exact/>
           
           <PrivateRoute component={Drawer} path="/home"/>
-          <Route path="*">
+          {/* <Route path="*">
             <NoMatch/>
-          </Route>
+          </Route> */}
         </Switch>
       </Router>
       {/* <Drawer/> */}

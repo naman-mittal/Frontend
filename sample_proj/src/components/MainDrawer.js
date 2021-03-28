@@ -25,8 +25,13 @@ import PrivateRoute from './PrivateRoute'
 import NoMatch from './NoMatch'
 import EditUser from "./EditUser";
 import Modal from '@material-ui/core/Modal';
-
-
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import ViewEmployees from './ViewEmployees'
+import {history} from '../helpers/history'
 
 const drawerWidth = 180;
 
@@ -134,10 +139,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MainDrawer() {
 
+
+  let history = useHistory()
+
   let { path, url } = useRouteMatch();
   let location = useLocation()
 
-  const history = useHistory()
+  //const history = useHistory()
 
   console.log("path = " + path)
   console.log("url = "+url)
@@ -162,8 +170,13 @@ export default function MainDrawer() {
     
     else if(location.pathname==="/home/profile")
     {
-      console.log('"setting value toprofile')
+      console.log('"setting value to profile')
       setValue(1)
+    }
+    else if(location.pathname==="/home/employees")
+    {
+      console.log('"setting value to employees')
+      setValue(2)
     }
     else
     {
@@ -180,12 +193,16 @@ export default function MainDrawer() {
 
   const dispatch = useDispatch()
 
-  const handleChange = (newValue) => {
+  const handleChange = (newValue,navUrl) => {
     console.log(newValue)
     if(newValue===undefined)
     setValue(0);
     else
     setValue(newValue);
+
+    // console.log("shifting to = " + navUrl)
+    // history.push(navUrl)
+
   };
 
   const openModal = () =>{
@@ -259,15 +276,27 @@ export default function MainDrawer() {
               Expense Manager
             </Typography>
            <Button color="inherit" className={classes.logoutBtn} onClick={openModal}>Logout</Button>
-           <Modal
-           className = {classes.modal}
+          <Dialog
         open={openM}
         onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
       >
-        {body}
-      </Modal>
+        <DialogTitle id="alert-dialog-title">{"Logout?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to log out?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+           <strong>Cancel</strong>
+          </Button>
+          <Button onClick={handleLogout} color="primary" autoFocus>
+            <strong>Logout</strong>
+          </Button>
+        </DialogActions>
+      </Dialog>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -317,7 +346,7 @@ export default function MainDrawer() {
             <ListItem
               button
               className={`drawertabs ${classes.active}`}
-              onClick={()=> handleChange(0)}
+              onClick={()=> handleChange(0,`${url}`)}
             >
               <ListItemIcon>
                 <DashboardIcon />
@@ -331,7 +360,7 @@ export default function MainDrawer() {
             
           <Link to={`${url}/profile`} className="router-lnk">
             <ListItem button className="drawertabs"
-            onClick={()=> handleChange(1)}
+            onClick={()=> handleChange(1,`${url}/profile`)}
             >
               <ListItemIcon>
                 <AccountCircleIcon />
@@ -342,6 +371,21 @@ export default function MainDrawer() {
               />
             </ListItem>
           </Link>
+
+          <Link to={`${url}/employees`} className="router-lnk">
+            <ListItem button className="drawertabs"
+            onClick={()=> handleChange(2)}
+            >
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText
+                className={classes.itemText}
+                primary={"Employees"}
+              />
+            </ListItem>
+          </Link>
+
 
           </Tabs>
 
@@ -378,7 +422,11 @@ export default function MainDrawer() {
             {/* <Route path="/profile">
               <Profile></Profile>
             </Route> */}
+            
+            <PrivateRoute component={ViewEmployees} path={`${path}/employees`} exact/>
+
             <PrivateRoute component={Profile} path={`${path}/profile`} exact/>
+            
 
             <PrivateRoute component={EditUser} path={`${path}/profile/edit`} exact/>
 

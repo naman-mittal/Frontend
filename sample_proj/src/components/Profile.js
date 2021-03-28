@@ -14,9 +14,7 @@ export default function Profile(){
             <div className='profile'>
                 
                 <DataGrid></DataGrid>
-                <Link to={`${url}/edit`}>
-                <EditBtn></EditBtn>
-                </Link>
+               
             </div>
         )
     

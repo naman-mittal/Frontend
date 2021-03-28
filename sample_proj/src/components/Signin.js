@@ -2,37 +2,11 @@
  import { useDispatch , useSelector } from 'react-redux'
  import { useHistory } from 'react-router-dom';
  import * as actions from '../actions/user'
-// import Button from '@material-ui/core/Button';
+ import Modal from '@material-ui/core/Modal';
+ import CircularProgress from '@material-ui/core/CircularProgress';
+ import Dialog from '@material-ui/core/Dialog';
+ import DialogContent from '@material-ui/core/DialogContent';
 
-// export default function Signin() {
-
-//     const user = JSON.parse(localStorage.getItem('user'));
-    
-//     const dispatch = useDispatch()
-
-//     const handleLogin = () =>{
-
-//         const username = document.getElementById('username').value
-//         const password = document.getElementById('password').value
-
-//         console.log(username)
-//         console.log(password)
-
-//         dispatch(actions.login(username,password))
-
-//     }
-
-   
-    
-//     return (
-//         <div>
-//             <input id="username" type="text" placeholder="username"></input>
-//             <input id="password" type="text" placeholder="password"></input>
-//             <Link to='/home' onClick={handleLogin}>Login</Link>
-//             <div>{user ? user.accessToken+" "+user.id : 'Not logged in'}</div>
-//         </div>
-//     )
-// }
 
 
 
@@ -95,6 +69,8 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+ 
+  
 }));
 
 export default function SignInSide() {
@@ -102,9 +78,20 @@ export default function SignInSide() {
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
    
+    const [open, setOpen] = React.useState(false)
+
+    const loggedIn = useSelector(state => state.loggedIn)
+
     const history = useHistory();
    
     const dispatch = useDispatch()
+
+    //console.log(loggedIn)
+
+    if(loggedIn){
+      console.log(loggedIn)
+      history.push('/home')
+    }
 
         // const handleLogin = (event) =>{
     
@@ -135,14 +122,15 @@ export default function SignInSide() {
         const handleSubmit= (e) => {
             e.preventDefault();
     
-          
+         
             if(username&&password)
             {
-              localStorage.setItem('user',JSON.stringify({id:100}))
+             // localStorage.setItem('user',JSON.stringify({id:100}))
             // dispatch(actions.signin({id:'temp'}))
              dispatch(actions.login(username,password))
+              setOpen(true)
            
-            history.push('/')
+            //history.push('/')
             }
             else
             alert('Username & Password cannot be blank')
@@ -151,7 +139,12 @@ export default function SignInSide() {
            // window.location.assign("/home")
         }
 
+  const handleClose = () =>{
+    setOpen(false)
+  }
+
   const classes = useStyles();
+
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -204,6 +197,14 @@ export default function SignInSide() {
             >
               Sign In
             </Button>
+            <Dialog
+            className = {classes.dialog}
+        open={open}
+        onClose={handleClose}
+       
+      >
+      <DialogContent> <CircularProgress /> </DialogContent>
+      </Dialog>
            
             </form>
             <Grid container>
