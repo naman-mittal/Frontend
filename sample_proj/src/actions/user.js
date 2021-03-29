@@ -36,6 +36,40 @@ export const fetchUser = (id) => {
 
 }
 
+const updateUser = () =>{
+    return {type : "UPDATE_USER",payload : {message : 'Updated Successfully'}}
+}
+
+export const editUser = (updateRequest) => {
+
+    //console.log("inside fetch user... id = ")
+    let user = JSON.parse(localStorage.getItem('user'));
+    console.log(user)
+
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json',
+    
+        'Authorization': 'Bearer ' + user.accessToken
+
+    },
+    body : JSON.stringify(updateRequest)
+    };
+    return dispatch => {
+        fetch('http://localhost:8080/api/v1/employee', requestOptions)
+            .then(res => {
+                console.log(res);
+                dispatch(updateUser());
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+              });
+
+    }
+
+}
+
+
 
 const findEmployees = (employees) =>{
     return {type : "FIND_Employees",payload : {employees}}

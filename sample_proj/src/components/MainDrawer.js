@@ -15,6 +15,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import DashboardIcon from "@material-ui/icons/Dashboard";
+import GroupIcon from '@material-ui/icons/Group';
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import {  Link, Switch , useRouteMatch,Route, useLocation, useHistory } from "react-router-dom";
 import MainDashboard from "./MainDashboard";
@@ -87,6 +88,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
+    backgroundColor : '#f5f5f5',
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -377,7 +379,7 @@ export default function MainDrawer() {
             onClick={()=> handleChange(2)}
             >
               <ListItemIcon>
-                <AccountCircleIcon />
+                <GroupIcon />
               </ListItemIcon>
               <ListItemText
                 className={classes.itemText}

@@ -1,8 +1,8 @@
 //localStorage.removeItem('user')
 let loginUser = JSON.parse(localStorage.getItem("user"));
 const initialState = loginUser
-  ? { loggedIn: true, loginUser, user: {} }
-  : { user: {} };
+  ? { loggedIn: true, loginUser, user: null,employees:null }
+  : { user: null ,employees : null};
 
 const reducer = (state = initialState, { type, payload }) => {
   console.log(type);
@@ -38,7 +38,7 @@ const reducer = (state = initialState, { type, payload }) => {
 
     case "UPDATE_USER":
       console.log(payload.message);
-      return { users: state.users, message: payload.message };
+      return { updated : true, message: payload.message };
 
     default:
       return state;

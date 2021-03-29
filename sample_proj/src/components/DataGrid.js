@@ -67,7 +67,7 @@ export default function DataGrid(props) {
     
       },[]);
 
-    if(user===undefined || user.loginDetails===undefined)
+    if(user==null || user.loginDetails===undefined)
     {
         return(
             <h1>No data</h1>
