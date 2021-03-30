@@ -6,10 +6,12 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import UserImg from './UserImg';
+import { deepOrange } from '@material-ui/core/colors';
+import Grid from '@material-ui/core/Grid';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme)=>({
     root: {
-      minWidth: 275,
+     // minWidth: 275,
     },
     bullet: {
       display: 'inline-block',
@@ -18,6 +20,12 @@ const useStyles = makeStyles({
     },
     title: {
       fontSize: 14,
+      marginLeft : theme.spacing(2),
+      marginTop : theme.spacing(1)
+    },
+    subTitle: {
+      fontSize: 14,
+      marginLeft : theme.spacing(2),
     },
     pos: {
       marginBottom: 12,
@@ -25,31 +33,47 @@ const useStyles = makeStyles({
     avatar : {
         fontSize : '10px',
     },
-  });
+    orange: {
+      color: theme.palette.getContrastText(deepOrange[500]),
+      backgroundColor: deepOrange[500],
+    },
+  }));
 
 export default function EmployeeCard(props) {
 
     const classes = useStyles();
-    const bull = <span className={classes.bullet}>•</span>;
+    //const bull = <span className={classes.bullet}>•</span>;
+
+    const user = props.employee
 
     return (
         <Card className={classes.root}>
         <CardContent>
-            <UserImg initials='NM'></UserImg>
-          <Typography className={classes.title} color="textSecondary" gutterBottom>
-            Word of the Day
+        <Grid container spacing={3}>
+          
+          <Grid item xs={2}>
+          <UserImg initials={user.empName.split(" ")[0][0]+user.empName.split(" ")[1][0]} color={classes.orange}></UserImg>
+          </Grid>
+
+          <Grid item xs={10}>
+          <Typography className={classes.title} color="textSecondary" >
+           <strong>{user.empName}</strong>
           </Typography>
-          <Typography variant="h5" component="h2">
-            be{bull}nev{bull}o{bull}lent
+          <Typography className={classes.subTitle} color="textSecondary" >
+           {user.empDomain?user.empDomain:'Not Assigned'}
           </Typography>
-          <Typography className={classes.pos} color="textSecondary">
-            adjective
+          </Grid>
+
+          <Grid item xs={12}>
+          <Typography className={classes.title} color="textSecondary" >
+           {user.empName}
           </Typography>
-          <Typography variant="body2" component="p">
-            well meaning and kindly.
-            <br />
-            {'"a benevolent smile"'}
-          </Typography>
+          </Grid>
+
+          </Grid>
+           
+         
+          
         </CardContent>
         <CardActions>
           <Button size="small">Learn More</Button>

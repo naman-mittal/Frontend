@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
-import { deepOrange, deepPurple } from '@material-ui/core/colors';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -10,22 +10,8 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
-  orange: {
-    color: theme.palette.getContrastText(deepOrange[500]),
-    backgroundColor: deepOrange[500],
-  },
-  purple: {
-    color: theme.palette.getContrastText(deepPurple[500]),
-    backgroundColor: deepPurple[500],
-  },
-  large: {
-    width: theme.spacing(15),
-    height: theme.spacing(15),
-    fontSize: '20px',
-  },
-  center: {
-    margin : 'auto',
-  }
+  
+  
 }));
 
 export default function UserImg(props) {
@@ -35,7 +21,7 @@ export default function UserImg(props) {
     <div className={classes.root}>
       {/* <Avatar>H</Avatar>
       <Avatar className={classes.orange}>N</Avatar> */}
-      <Avatar className={`${classes.purple} ${classes.large} ${classes.center}` } >{props.initials}</Avatar>
+      <Avatar className={`${props.color} ${props.size} ${props.align}` } >{props.initials}</Avatar>
     </div>
   );
 }

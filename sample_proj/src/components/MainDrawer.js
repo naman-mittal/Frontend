@@ -1,6 +1,6 @@
 import React,{useEffect} from "react";
 import clsx from "clsx";
-import { useDispatch } from 'react-redux'
+import { useDispatch,useSelector } from 'react-redux'
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -21,8 +21,11 @@ import {  Link, Switch , useRouteMatch,Route, useLocation, useHistory } from "re
 import MainDashboard from "./MainDashboard";
 import Profile from "./Profile";
 import Tabs from "@material-ui/core/Tabs";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 import * as actions from '../actions/user'
 import PrivateRoute from './PrivateRoute'
+import AdminRoute from './AdminRoute'
 import NoMatch from './NoMatch'
 import EditUser from "./EditUser";
 import Modal from '@material-ui/core/Modal';
@@ -35,6 +38,10 @@ import ViewEmployees from './ViewEmployees'
 import {history} from '../helpers/history'
 
 const drawerWidth = 180;
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -144,6 +151,8 @@ export default function MainDrawer() {
 
   let history = useHistory()
 
+  const user = JSON.parse(localStorage.getItem('user'))
+
   let { path, url } = useRouteMatch();
   let location = useLocation()
 
@@ -160,8 +169,14 @@ export default function MainDrawer() {
 
   const [openM, setOpenM] = React.useState(false);
 
+  const [openSnack, setOpenSnack] = React.useState(false);
+
+  const message = useSelector((state) => state.message);
+
   useEffect(() => {
 
+    if(message)
+    setOpenSnack(true)
     console.log("inside effect")
 
     if(location.pathname==="/home")
@@ -239,22 +254,36 @@ export default function MainDrawer() {
     setOpenM(false)
   }
 
-  const body = (
-    <div  className={classes.paper}>
-      <h2 id="simple-modal-title">Logout</h2>
-      <p id="simple-modal-description">
-       Are you sure you want to logout?
-      </p>
-      <Button variant="contained"  onClick={handleLogout}><strong>Okay</strong></Button>
-      <Button className={classes.default} onClick={handleClose}>Cancel</Button>
-    </div>
-  );
+  const handleCloseSnack = ()=>{
+    console.log("closing snackbar...")
+    setOpenSnack(false)
+  }
+
+  // const body = (
+  //   <div  className={classes.paper}>
+  //     <h2 id="simple-modal-title">Logout</h2>
+  //     <p id="simple-modal-description">
+  //      Are you sure you want to logout?
+  //     </p>
+  //     <Button variant="contained"  onClick={handleLogout}><strong>Okay</strong></Button>
+  //     <Button className={classes.default} onClick={handleClose}>Cancel</Button>
+  //   </div>
+  // );
 
   
 
   return (
     
       <div className={classes.root}>
+         <Snackbar
+              open={openSnack}
+              autoHideDuration={6000}
+              onClose={handleCloseSnack}
+            >
+              <Alert onClose={handleCloseSnack} severity="success">
+                {message}
+              </Alert>
+            </Snackbar>
         <CssBaseline />
         <AppBar
           position="fixed"
@@ -374,7 +403,7 @@ export default function MainDrawer() {
             </ListItem>
           </Link>
 
-          <Link to={`${url}/employees`} className="router-lnk">
+         {  user.roles[0]==='ROLE_ADMIN'  && <Link to={`${url}/employees`} className="router-lnk">
             <ListItem button className="drawertabs"
             onClick={()=> handleChange(2)}
             >
@@ -387,7 +416,7 @@ export default function MainDrawer() {
               />
             </ListItem>
           </Link>
-
+}
 
           </Tabs>
 
@@ -425,7 +454,7 @@ export default function MainDrawer() {
               <Profile></Profile>
             </Route> */}
             
-            <PrivateRoute component={ViewEmployees} path={`${path}/employees`} exact/>
+            <AdminRoute component={ViewEmployees} path={`${path}/employees`} exact/>
 
             <PrivateRoute component={Profile} path={`${path}/profile`} exact/>
             

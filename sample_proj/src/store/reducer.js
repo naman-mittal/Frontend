@@ -14,7 +14,16 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         loggedIn: true,
         loginUser: payload.user,
+        message : payload.message 
       };
+
+      case "LOGIN_FAILED":
+        return {
+         
+         
+          message : payload.message 
+        };
+  
 
     case "LOGOUT_SUCCESS":
       return {};

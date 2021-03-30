@@ -13,7 +13,8 @@ const useStyles = makeStyles((theme) => ({
         position : 'fixed',
         zIndex: theme.zIndex.drawer + 1,
       padding: theme.spacing(2),
-      width : '96%',
+      margin:'auto',
+      width : '96.5%',
       textAlign: 'left',
       color: 'white',
       backgroundColor : '#536dfe',
@@ -63,30 +64,15 @@ export default function ViewEmployees() {
   return (
     <div>
         
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
+      
         <Paper className={classes.paper}><strong>Employees</strong></Paper>
-        </Grid>
-        </Grid>
+       
         <div className={classes.drawerHeader} />
-        <div>
         <Grid container spacing={3}>
         {employeeList}
-        {employeeList}
-        {employeeList}
-        {employeeList}
-        {employeeList}
-
-        {employeeList}
-        {employeeList}
-        {employeeList}
-        {employeeList}
-        {employeeList}
-        {employeeList}
-        {employeeList}
-
-      </Grid>
-      </div>
+        
+        </Grid>
+      
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import {history} from '../helpers/history'
+import {projectManagers} from '../helpers/sampleData'
 
 
 const findUser = (user) =>{
@@ -108,7 +108,7 @@ export const fetchEmployees = () => {
 
 
 export const signin = (user) =>{
-    return {type : "LOGIN_SUCCESS",payload : {user}}
+    return {type:'LOGIN_SUCCESS',payload : {user,message : 'Successfully logged in'}}
 }
 
 export const login = (username,password) => {
@@ -133,8 +133,8 @@ export const login = (username,password) => {
             .then(res => {
                 console.log(res);
                 //console.log(res.message);
-                // if(res.status!==201)
-                // return Promise.reject("Bad credentials");
+                 if(res.status!==200)
+                 return Promise.reject("Incorrect username and password");
                 return res.json();
             })
             .then(user => {
@@ -156,6 +156,7 @@ export const login = (username,password) => {
             })
             .catch((error) => {
                 console.error('Error:', error);
+                dispatch({type:'LOGIN_FAILED',payload : {message : error}})
               });
 
     }
@@ -170,7 +171,10 @@ export const signUp = (user) => {
 
     console.log("signing up")
 
-    
+    if(projectManagers.includes(user.email))
+    {
+        user['roles'] = ['manager']
+    }
 
     const requestOptions = {
         method: 'POST',

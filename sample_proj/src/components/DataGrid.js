@@ -11,6 +11,7 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import TodayIcon from '@material-ui/icons/Today';
 import DomainIcon from '@material-ui/icons/Domain';
+import SecurityIcon from '@material-ui/icons/Security';
 import FaceIcon from '@material-ui/icons/Face';
 import DataItem from './DataItem'
 import { useSelector , useDispatch } from 'react-redux';
@@ -19,6 +20,7 @@ import UserImg from './UserImg'
 import ruppee from '../images/img_ruppee.png'
 import EditBtn from './EditBtn'
 import {Link,useRouteMatch} from 'react-router-dom'
+import { deepPurple } from '@material-ui/core/colors';
 
 
 
@@ -46,6 +48,19 @@ const useStyles = makeStyles((theme) => ({
   heading:{
       fontSize:18,
       color : theme.palette.primary.dark,
+  },
+  large: {
+    width: theme.spacing(15),
+    height: theme.spacing(15),
+    fontSize: '20px',
+  },
+  purple: {
+    color: theme.palette.getContrastText(deepPurple[500]),
+    backgroundColor: deepPurple[500],
+  },
+ 
+  mid: {
+    margin : 'auto',
   }
 }));
 
@@ -54,6 +69,8 @@ export default function DataGrid(props) {
    let { path, url } = useRouteMatch();
  
     const user = useSelector(state => state.user)
+
+    const loginUser = JSON.parse(localStorage.getItem('user'))
 
     const dispatch = useDispatch();  
   
@@ -70,7 +87,7 @@ export default function DataGrid(props) {
     if(user==null || user.loginDetails===undefined)
     {
         return(
-            <h1>No data</h1>
+            <h1>Loading data</h1>
         )
     }
 
@@ -88,7 +105,7 @@ export default function DataGrid(props) {
     
 
     <div className={classes.root}>
-        <UserImg initials={user.empName.split(" ")[0][0]+user.empName.split(" ")[1][0]}></UserImg>
+        <UserImg initials={user.empName.split(" ")[0][0]+user.empName.split(" ")[1][0]} size={classes.large} align={classes.mid} color={classes.purple}></UserImg>
                 <br/>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={10} md={6} lg={4} xl={4}>
@@ -119,6 +136,7 @@ export default function DataGrid(props) {
           <span className={classes.heading}> Login Details </span> <VpnKeyIcon className={classes.right}/>
               <List className={classes.list}>
               <DataItem icon={<FaceIcon/>} title='Username' value={user.loginDetails.userName}></DataItem>
+              <DataItem icon={<SecurityIcon/>} title='Authorization' value={loginUser.roles[0]}></DataItem>
               </List>
               </Paper>
         </Grid>
