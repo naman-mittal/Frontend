@@ -69,7 +69,40 @@ export const editUser = (updateRequest) => {
 
 }
 
+const removeUser = (id) =>{
+    return {type : "DELETE_EMPLOYEE_SUCCESS",payload : {id,alert:{type : 'success',message : 'Employee deleted!'}}}
+}
 
+export const deleteUser = (id) => {
+
+    console.log("inside delete user... id = " + id)
+    let user = JSON.parse(localStorage.getItem('user'));
+    console.log(user)
+
+    const requestOptions = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json',
+    
+        'Authorization': 'Bearer ' + user.accessToken
+
+    }
+    };
+    return dispatch => {
+        fetch('http://localhost:8080/api/v1/employee/'+id, requestOptions)
+            .then(res => {
+                console.log(res);
+                if(res.status!==204)
+                return Promise.reject("Couldn't delete!");
+                dispatch(removeUser(id));
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                dispatch({type : "DELETE_EMPLOYEE_FAILED",payload : {alert:{type : 'error',message : error}}})
+              });
+
+    }
+
+}
 
 const findEmployees = (employees) =>{
     return {type : "FIND_Employees",payload : {employees}}
@@ -108,7 +141,7 @@ export const fetchEmployees = () => {
 
 
 export const signin = (user) =>{
-    return {type:'LOGIN_SUCCESS',payload : {user,message : 'Successfully logged in'}}
+    return {type:'LOGIN_SUCCESS',payload : {user,alert : {type : 'success',message : 'Successfully logged in'}}}
 }
 
 export const login = (username,password) => {
@@ -156,7 +189,7 @@ export const login = (username,password) => {
             })
             .catch((error) => {
                 console.error('Error:', error);
-                dispatch({type:'LOGIN_FAILED',payload : {message : error}})
+                dispatch({type:'LOGIN_FAILED',payload : {alert : {type : 'error',message : error}}})
               });
 
     }
@@ -217,7 +250,7 @@ export const signUp = (user) => {
 }
 
 const signout = () =>{
-    return {type : "LOGOUT_SUCCESS",payload : {}}
+    return {type : "LOGOUT_SUCCESS",payload : {alert : {type : 'success',message : 'Successfully logged out'}}}
 }
 
 export const logout = () => {
@@ -237,4 +270,6 @@ export const logout = () => {
     }
 }
 
-
+export const reset = () =>{
+    return {type : "RESET",payload : {}}
+}

@@ -40,9 +40,9 @@ function App() {
           <PublicRoute restricted={true} component={Signup} path="/signup" exact/>
           
           <PrivateRoute component={Drawer} path="/home"/>
-          {/* <Route path="*">
+          <Route path="*">
             <NoMatch/>
-          </Route> */}
+          </Route>
         </Switch>
       </Router>
       {/* <Drawer/> */}

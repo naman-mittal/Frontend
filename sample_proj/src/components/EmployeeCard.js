@@ -8,10 +8,29 @@ import Typography from '@material-ui/core/Typography';
 import UserImg from './UserImg';
 import { deepOrange } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { useDispatch } from 'react-redux';
+import * as actions from '../actions/user'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 const useStyles = makeStyles((theme)=>({
     root: {
      // minWidth: 275,
+     //backgroundColor: '#90caf9',
+     color : 'black',
+     boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
+     
+
+     "&:hover": {
+      boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.2)',
+        transform: 'scale(1.05)',
+    },
     },
     bullet: {
       display: 'inline-block',
@@ -37,6 +56,12 @@ const useStyles = makeStyles((theme)=>({
       color: theme.palette.getContrastText(deepOrange[500]),
       backgroundColor: deepOrange[500],
     },
+    deleteBtn :{
+      color : 'red',
+    },
+    right:{
+      alignContent : 'right',
+    },
   }));
 
 export default function EmployeeCard(props) {
@@ -44,10 +69,48 @@ export default function EmployeeCard(props) {
     const classes = useStyles();
     //const bull = <span className={classes.bullet}>•</span>;
 
+    const [open,setOpen] = React.useState(false)
+
+    const dispatch = useDispatch()
+
     const user = props.employee
+
+    const handleDelete = () =>{
+      console.log('deleting ' + props.employee.empId)
+      dispatch(actions.deleteUser(props.employee.empId))
+    }
+
+    const handleClose =() =>{
+      setOpen(false)
+    }
+
+    const handleOpen =()=>{
+      setOpen(true)
+    }
 
     return (
         <Card className={classes.root}>
+          <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Delete?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            This action is irreversible!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+           <strong>Cancel</strong>
+          </Button>
+          <Button onClick={handleDelete} color="primary" autoFocus>
+            <strong>Delete</strong>
+          </Button>
+        </DialogActions>
+      </Dialog>
         <CardContent>
         <Grid container spacing={3}>
           
@@ -56,16 +119,16 @@ export default function EmployeeCard(props) {
           </Grid>
 
           <Grid item xs={10}>
-          <Typography className={classes.title} color="textSecondary" >
+          <Typography className={classes.title}  >
            <strong>{user.empName}</strong>
           </Typography>
-          <Typography className={classes.subTitle} color="textSecondary" >
+          <Typography className={classes.subTitle}  >
            {user.empDomain?user.empDomain:'Not Assigned'}
           </Typography>
           </Grid>
 
           <Grid item xs={12}>
-          <Typography className={classes.title} color="textSecondary" >
+          <Typography className={classes.title}  >
            {user.empName}
           </Typography>
           </Grid>
@@ -75,8 +138,10 @@ export default function EmployeeCard(props) {
          
           
         </CardContent>
-        <CardActions>
-          <Button size="small">Learn More</Button>
+        <CardActions className={classes.right}>
+        <IconButton aria-label="delete" onClick={handleOpen} className={classes.deleteBtn}>
+          <DeleteIcon />
+        </IconButton>
         </CardActions>
       </Card>
     )

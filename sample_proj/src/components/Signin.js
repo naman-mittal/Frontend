@@ -86,7 +86,7 @@ export default function SignInSide() {
 
   const loggedIn = useSelector((state) => state.loggedIn);
 
- const message = useSelector((state) => state.message);
+ const alert = useSelector((state) => state.alert);
 
   
 
@@ -96,13 +96,13 @@ export default function SignInSide() {
 
   useEffect(() => {
 
-    if(message)
+    if(alert)
     {
       handleClose()
       setOpenSnack(true)
     }
   
-    },[message]);
+    },[alert]);
 
   //console.log(loggedIn)
 
@@ -144,8 +144,9 @@ export default function SignInSide() {
       setOpen(true);
 
       //history.push('/')
-    } else alert("Username & Password cannot be blank");
-
+    } else {
+    window.alert("Username & Password cannot be blank");
+    }
     // window.location.assign("/home")
   };
 
@@ -154,8 +155,10 @@ export default function SignInSide() {
   };
 
   const handleCloseSnack = () => {
+    if(openSnack){
     setOpenSnack(false);
-    dispatch(actions.logout())
+    dispatch(actions.reset())
+    }
   };
 
   const classes = useStyles();
@@ -181,7 +184,7 @@ export default function SignInSide() {
               id="username"
               label="Username"
               name="username"
-              autoComplete="username"
+              //autoComplete="username"
               autoFocus
               onChange={handleChange}
             />
@@ -196,6 +199,7 @@ export default function SignInSide() {
               id="password"
               autoComplete="current-password"
               onChange={handleChange}
+              
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -226,8 +230,8 @@ export default function SignInSide() {
               autoHideDuration={6000}
               onClose={handleCloseSnack}
             >
-              <Alert onClose={handleCloseSnack} severity="error">
-                {message}
+              <Alert onClose={handleCloseSnack} severity={alert?alert.type:'success'}>
+                {alert ? alert.message : 'sample'}
               </Alert>
             </Snackbar>
           </form>

@@ -21,6 +21,7 @@ import ruppee from '../images/img_ruppee.png'
 import EditBtn from './EditBtn'
 import {Link,useRouteMatch} from 'react-router-dom'
 import { deepPurple } from '@material-ui/core/colors';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 
@@ -61,6 +62,12 @@ const useStyles = makeStyles((theme) => ({
  
   mid: {
     margin : 'auto',
+  },
+  centerAlign : {
+    position: 'absolute',
+  top: '50%',
+  left: '50%',
+ // transform: 'translate(-50%, -50%)',
   }
 }));
 
@@ -87,7 +94,7 @@ export default function DataGrid(props) {
     if(user==null || user.loginDetails===undefined)
     {
         return(
-            <h1>Loading data</h1>
+          <CircularProgress className = {classes.centerAlign} />
         )
     }
 

@@ -171,11 +171,11 @@ export default function MainDrawer() {
 
   const [openSnack, setOpenSnack] = React.useState(false);
 
-  const message = useSelector((state) => state.message);
+  const alert = useSelector((state) => state.alert);
 
   useEffect(() => {
 
-    if(message)
+    if(alert)
     setOpenSnack(true)
     console.log("inside effect")
 
@@ -280,8 +280,8 @@ export default function MainDrawer() {
               autoHideDuration={6000}
               onClose={handleCloseSnack}
             >
-              <Alert onClose={handleCloseSnack} severity="success">
-                {message}
+              <Alert onClose={handleCloseSnack} severity={alert?alert.type:'success'}>
+                {alert ? alert.message : 'sample'}
               </Alert>
             </Snackbar>
         <CssBaseline />
