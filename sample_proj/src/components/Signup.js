@@ -171,7 +171,7 @@ export default function SignUp() {
                 id="username"
                 label="Username"
                 name="username"
-                autoComplete="username"
+                //autoComplete="username"
                 onChange={handleChange}
               />
             </Grid>

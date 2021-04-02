@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "left",
     color: "white",
     backgroundColor: "#536dfe",
-    top: 63,
+    //top: 63,
   },
   sticky: {
     position: "sticky",
@@ -133,6 +133,10 @@ export default function ViewEmployees() {
     return <h1>Loading...</h1>;
   }
 
+  // if (filteredEmployees && filteredEmployees.length===0) {
+  //   return <h1>No match found...</h1>;
+  // }
+
   const handleChange = (e) =>{
 
       const {value} = e.target
@@ -142,7 +146,7 @@ export default function ViewEmployees() {
       // if(value==='')
       // setFilteredEmployees(employees)
       // else
-      setFilteredEmployees(employees.filter(emp=> emp.empName.toLowerCase().match(new RegExp(`^${value}`))))
+      setFilteredEmployees(employees.filter(emp=> emp.empName.toLowerCase().match(new RegExp(`^${value}`)) ||  emp.empEmailId.toLowerCase().match(new RegExp(`^${value}`))))
 
       console.log(filteredEmployees)
 
@@ -191,10 +195,10 @@ export default function ViewEmployees() {
       </Paper>
 
       {/* <div className={classes.drawerHeader} /> */}
-      <Grid container spacing={3}>
+     { filteredEmployees && filteredEmployees.length===0 ? <h1>No match found...</h1>  : <Grid container spacing={3}>
         {employeeList}
         
-      </Grid>
+      </Grid>}
     </div>
   );
 }

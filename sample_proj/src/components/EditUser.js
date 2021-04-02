@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EditUser() {
+export default function EditUser({match}) {
 
     const classes = useStyles()
 
@@ -68,18 +68,27 @@ export default function EditUser() {
 
     const dispatch = useDispatch();  
 
-    if(updated)
-    {
-      history.push("/home/profile")
-    }
+   
 
     useEffect(() => {
 
         let loginUser = JSON.parse(localStorage.getItem('user'));
-        if(loginUser)
-          dispatch(actions.fetchUser(loginUser.id))
+        let id = match.params.id 
+
+         if(loginUser.roles[0]==='ROLE_ADMIN' || loginUser.id === id)
+          dispatch(actions.fetchUser(id))
       
         },[]);
+
+        useEffect(() => {
+
+          if(updated)
+  {
+    console.log(history)
+    history.goBack()
+  }
+        
+          },[updated,history]);
 
         useEffect(() => {
 
@@ -138,7 +147,7 @@ export default function EditUser() {
         
       }
 
-    if(user===undefined)
+    if(user===null || user.empName===undefined)
     {
       console.log('checking for user....')
       return(
@@ -150,9 +159,11 @@ export default function EditUser() {
 
 
   const handleCancel = ()=>{
+    console.log(history)
     history.goBack()
   }
 
+ 
     return (
         <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -161,7 +172,7 @@ export default function EditUser() {
           <EditIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-         Edit your profile 
+         Edit profile 
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>

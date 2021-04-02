@@ -10,6 +10,7 @@ import { deepOrange } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import { useDispatch } from 'react-redux';
 import * as actions from '../actions/user'
 import Dialog from '@material-ui/core/Dialog';
@@ -17,6 +18,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {Link , useRouteMatch} from 'react-router-dom'
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 
 
 const useStyles = makeStyles((theme)=>({
@@ -25,6 +31,7 @@ const useStyles = makeStyles((theme)=>({
      //backgroundColor: '#90caf9',
      color : 'black',
      boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
+     
      
 
      "&:hover": {
@@ -46,9 +53,6 @@ const useStyles = makeStyles((theme)=>({
       fontSize: 14,
       marginLeft : theme.spacing(2),
     },
-    pos: {
-      marginBottom: 12,
-    },
     avatar : {
         fontSize : '10px',
     },
@@ -59,13 +63,20 @@ const useStyles = makeStyles((theme)=>({
     deleteBtn :{
       color : 'red',
     },
+    viewBtn :{
+      color : 'blue',
+    },
     right:{
       alignContent : 'right',
+    },
+    primary:{
+      fontSize : 'calc(0.65vw + 0.65vh + 0.25vmin)',
     },
   }));
 
 export default function EmployeeCard(props) {
 
+  let { path, url } = useRouteMatch();
     const classes = useStyles();
     //const bull = <span className={classes.bullet}>•</span>;
 
@@ -111,8 +122,8 @@ export default function EmployeeCard(props) {
           </Button>
         </DialogActions>
       </Dialog>
-        <CardContent>
-        <Grid container spacing={3}>
+        {/* <CardContent> */}
+        <Grid container spacing={1}>
           
           <Grid item xs={2}>
           <UserImg initials={user.empName.split(" ")[0][0]+user.empName.split(" ")[1][0]} color={classes.orange}></UserImg>
@@ -128,8 +139,16 @@ export default function EmployeeCard(props) {
           </Grid>
 
           <Grid item xs={12}>
-          <Typography className={classes.title}  >
-           {user.empName}
+          <Typography  >
+            
+          
+
+           <ListItem>
+          <ListItemIcon>
+          <MailOutlineIcon/>
+          </ListItemIcon>
+          <ListItemText primary= {user.empEmailId} classes={{primary : classes.primary}} />
+        </ListItem>
           </Typography>
           </Grid>
 
@@ -137,11 +156,16 @@ export default function EmployeeCard(props) {
            
          
           
-        </CardContent>
+        {/* </CardContent> */}
         <CardActions className={classes.right}>
+        <Link to={`${path}/view/${props.employee.empId}`} ><IconButton aria-label="delete"  className={classes.viewBtn}>
+          <VisibilityIcon />
+        </IconButton>
+        </Link> 
         <IconButton aria-label="delete" onClick={handleOpen} className={classes.deleteBtn}>
           <DeleteIcon />
         </IconButton>
+        
         </CardActions>
       </Card>
     )

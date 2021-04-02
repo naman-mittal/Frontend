@@ -1,4 +1,5 @@
 import React,{useEffect} from 'react';
+import {useHistory} from 'react-router'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -18,7 +19,9 @@ import { useSelector , useDispatch } from 'react-redux';
 import * as actions from '../actions/user'
 import UserImg from './UserImg'
 import ruppee from '../images/img_ruppee.png'
-import EditBtn from './EditBtn'
+import ActionBtn from './ActionBtn'
+import EditIcon from '@material-ui/icons/Edit';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import {Link,useRouteMatch} from 'react-router-dom'
 import { deepPurple } from '@material-ui/core/colors';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -68,12 +71,25 @@ const useStyles = makeStyles((theme) => ({
   top: '50%',
   left: '50%',
  // transform: 'translate(-50%, -50%)',
-  }
+  },
+  editPos:{
+    top:50,
+   right:0,
+    position : 'fixed',
+},
+backPos:{
+//   top:50,
+//  left:0,
+ float : 'left',
+  //position : 'absolute',
+},
 }));
 
 export default function DataGrid(props) {
 
    let { path, url } = useRouteMatch();
+
+   const history = useHistory()
  
     const user = useSelector(state => state.user)
 
@@ -85,9 +101,12 @@ export default function DataGrid(props) {
 
     useEffect(() => {
 
+      //console.log('param id = ' + match.params.id)
+
       let loginUser = JSON.parse(localStorage.getItem('user'));
-      if(loginUser)
-        dispatch(actions.fetchUser(loginUser.id))
+      let id = props.viewId ? props.viewId : loginUser.id
+      //if(loginUser)
+        dispatch(actions.fetchUser(id))
     
       },[]);
 
@@ -99,7 +118,11 @@ export default function DataGrid(props) {
     }
 
     
-  
+  const handleBack = () =>{
+    console.log('going back...')
+   console.log(history)
+   history.goBack()
+  }
 
  // dispatch(actions.fetchUser(1))
 
@@ -112,6 +135,7 @@ export default function DataGrid(props) {
     
 
     <div className={classes.root}>
+       <ActionBtn title='Go Back' icon={<ArrowBackIcon/>} pos={classes.backPos} handleBack={handleBack}></ActionBtn>
         <UserImg initials={user.empName.split(" ")[0][0]+user.empName.split(" ")[1][0]} size={classes.large} align={classes.mid} color={classes.purple}></UserImg>
                 <br/>
       <Grid container spacing={3}>
@@ -143,15 +167,16 @@ export default function DataGrid(props) {
           <span className={classes.heading}> Login Details </span> <VpnKeyIcon className={classes.right}/>
               <List className={classes.list}>
               <DataItem icon={<FaceIcon/>} title='Username' value={user.loginDetails.userName}></DataItem>
-              <DataItem icon={<SecurityIcon/>} title='Authorization' value={loginUser.roles[0]}></DataItem>
+              <DataItem icon={<SecurityIcon/>} title='Authorization' value={user.loginDetails.roles[0].name}></DataItem>
               </List>
               </Paper>
         </Grid>
         
       </Grid>
-       <Link to={`${url}/edit`}>
-                <EditBtn user={user}></EditBtn>
+       <Link to={`${path}/edit/${user.empId}`}>
+                <ActionBtn title='Edit' icon={<EditIcon/>} pos={classes.editPos}></ActionBtn>
                 </Link>
+               
     </div>
   );
 }

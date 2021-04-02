@@ -456,10 +456,14 @@ export default function MainDrawer() {
             
             <AdminRoute component={ViewEmployees} path={`${path}/employees`} exact/>
 
+            <AdminRoute component={Profile} path={`${path}/employees/view/:id`} exact/>
+
+            <AdminRoute component={EditUser} path={`${path}/employees/view/:id/edit/:id`} exact/>
+
             <PrivateRoute component={Profile} path={`${path}/profile`} exact/>
             
 
-            <PrivateRoute component={EditUser} path={`${path}/profile/edit`} exact/>
+            <PrivateRoute component={EditUser} path={`${path}/profile/edit/:id`} exact/>
 
             {/* <Route path="/dashboard">
               <MainDashboard></MainDashboard>

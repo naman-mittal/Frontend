@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignInSide() {
+export default function SignIn() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   
@@ -84,9 +84,9 @@ export default function SignInSide() {
 
   const [openSnack, setOpenSnack] = React.useState(false);
 
-  const loggedIn = useSelector((state) => state.loggedIn);
+  const loggedIn = useSelector((state) => state.reducer.loggedIn);
 
- const alert = useSelector((state) => state.alert);
+ const alert = useSelector((state) => state.reducer.alert);
 
   
 
@@ -112,21 +112,7 @@ export default function SignInSide() {
    history.push("/home");
   }
 
-  // const handleLogin = (event) =>{
-
-  //     const username = document.getElementById('username').value
-  //     const password = document.getElementById('password').value
-
-  //     console.log(username)
-  //     console.log(password)
-
-  //     dispatch(actions.login(username,password))
-
-  //     // render={<Redirect to='/home'/>}
-
-  //     event.preventDefault()
-
-  // }
+ 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -218,7 +204,7 @@ export default function SignInSide() {
             <Dialog
               className={classes.dialog}
               open={open}
-              onClose={handleClose}
+              //onClose={handleClose}
             >
               <DialogContent>
                 {" "}

@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
-import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,14 +21,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EditBtn() {
+export default function ActionBtn(props) {
   const classes = useStyles();
 
+  const handleClick = () =>{
+    console.log('clicked...')
+  }
+
   return (
-    <div className={classes.root}>
-      <Tooltip title="Edit" aria-label="edit">
+    <div className={props.pos} onClick={props.handleBack}>
+      <Tooltip title={props.title} aria-label="edit">
         <Fab color="secondary" className={classes.fab}>
-          <EditIcon />
+         {props.icon}
         </Fab>
       </Tooltip>
     </div>

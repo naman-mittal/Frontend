@@ -3,15 +3,21 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import reducer from './store/reducer'
+import claimReducer from './store/claimReducer'
 import { Provider } from 'react-redux';
 import {createLogger} from 'redux-logger'
 
+const combReducer = combineReducers({
+  reducer,
+  claimReducer
+})
+
 const loggerMiddleware = createLogger();
 
-const store = createStore(reducer,applyMiddleware(thunk,loggerMiddleware))
+const store = createStore(combReducer,applyMiddleware(thunk,loggerMiddleware))
 
 ReactDOM.render(
   <React.StrictMode>
