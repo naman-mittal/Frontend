@@ -91,7 +91,7 @@ export default function DataGrid(props) {
 
    const history = useHistory()
  
-    const user = useSelector(state => state.user)
+    const user = useSelector(state => state.reducer.user)
 
     const loginUser = JSON.parse(localStorage.getItem('user'))
 

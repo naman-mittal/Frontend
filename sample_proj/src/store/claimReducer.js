@@ -13,6 +13,10 @@ const claimReducer = (state = initialState, { type, payload }) => {
       
       return { claims: payload.claims};
 
+      case "FIND_CLAIMS":
+      
+        return { claims: payload.claims};
+
    
 
     default:

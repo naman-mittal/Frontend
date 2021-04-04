@@ -171,7 +171,7 @@ export default function MainDrawer() {
 
   const [openSnack, setOpenSnack] = React.useState(false);
 
-  const alert = useSelector((state) => state.alert);
+  const alert = useSelector((state) => state.reducer.alert);
 
   useEffect(() => {
 

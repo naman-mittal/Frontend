@@ -32,3 +32,38 @@ export const fetchClaimsByEmployee = (id) => {
     }
 
 }
+
+const findClaims = (claims) =>{
+    return {type : "FIND_CLAIMS",payload : {claims}}
+}
+
+export const fetchClaims = () => {
+
+    //console.log("fetch user... id = " + id)
+    let user = JSON.parse(localStorage.getItem('user'));
+    console.log(user)
+
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json',
+    
+        'Authorization': 'Bearer ' + user.accessToken
+
+    }
+    };
+    return dispatch => {
+        fetch('http://localhost:8080/api/v1/expenseClaims', requestOptions)
+            .then(res => {
+                console.log(res);
+                return res.json();
+            })
+            .then(data => {
+                console.log(data);
+                dispatch(findClaims(data));
+            }).catch((error) => {
+                console.error('Error:', error);
+              });
+
+    }
+
+}

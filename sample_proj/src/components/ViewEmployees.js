@@ -85,9 +85,9 @@ const useStyles = makeStyles((theme) => ({
 export default function ViewEmployees() {
   const classes = useStyles();
 
-  const employees = useSelector((state) => state.employees);
+  const employees = useSelector((state) => state.reducer.employees);
 
-  const alert = useSelector((state) => state.alert);
+  const alert = useSelector((state) => state.reducer.alert);
 
   const [employeeList, setEmployeeList] = React.useState([]);
 
