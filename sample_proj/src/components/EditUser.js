@@ -53,9 +53,9 @@ export default function EditUser({match}) {
 
     const classes = useStyles()
 
-    const user = useSelector(state => state.user)
+    const user = useSelector(state => state.reducer.user)
 
-    const updated = useSelector(state => state.updated)
+    const updated = useSelector(state => state.reducer.updated)
 
     const [firstName, setFirstName] = React.useState('')
     const [lastName, setLastName] = React.useState('')
@@ -147,7 +147,7 @@ export default function EditUser({match}) {
         
       }
 
-    if(user===null || user.empName===undefined)
+    if(user===undefined || user.empName===undefined)
     {
       console.log('checking for user....')
       return(
