@@ -50,9 +50,12 @@ const useStyles = makeStyles((theme) => ({
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
+  cancel: {
+    margin: theme.spacing(3, 4,2, 4),
   },
+  update:{
+    margin: theme.spacing(3, 0, 2,1),
+  }
 }));
 
 export default function EditUser({match}) {
@@ -60,6 +63,8 @@ export default function EditUser({match}) {
     const classes = useStyles()
 
     const user = useSelector(state => state.reducer.user)
+
+    const loginUser = JSON.parse(localStorage.getItem('user'))
 
     const updated = useSelector(state => state.reducer.updated)
 
@@ -70,6 +75,8 @@ export default function EditUser({match}) {
     const [password, setPassword] = React.useState('')
     const [pan, setPan] = React.useState('')
     const [doj, setDoj] = React.useState(Date.now())
+    const [dob, setDob] = React.useState(Date.now())
+    const [domain, setDomain] = React.useState(null)
 
 
     const history = useHistory()
@@ -115,13 +122,19 @@ export default function EditUser({match}) {
           setPan(user.empPAN)
           setFirstName(user.empName.split(" ")[0])
           setLastName(user.empName.split(" ")[1])
+          setEmail(user.empEmailId)
+          setUsername(user.loginDetails.userName)
+          setDob(user.empDOB)
+          setDomain(user.empDomain)
           }
           
         
           },[user]);
 
           const handleDateChange = (date) => {
-            setDoj(date);
+            setDob(date);
+            console.log("date = "+ date)
+            console.log(typeof(date))
           };
 
         const handleChange = (e) =>{
@@ -144,8 +157,26 @@ export default function EditUser({match}) {
           setPassword(value)
           else if(name==='pan')
           setPan(value)
+          else if(name==='domain')
+          {
+            setDomain(value)
+          }
       
       
+        }
+
+
+        const getDateFormat = (date) =>{
+          console.log("month = " + date.getMonth())
+          console.log("year = " + date.getFullYear())
+          console.log("day = " + date.getDate())
+
+          let year = date.getFullYear()
+          let month = date.getMonth()>9?date.getMonth()+1:"0"+(date.getMonth()+1)
+          let day = date.getDate()>9?date.getDate():"0"+date.getDate()
+
+          return month+"/"+day+"/"+year
+
         }
 
         const handleSubmit= (e) => {
@@ -162,6 +193,12 @@ export default function EditUser({match}) {
             id: user.empId,
             //empName: "Naman Mittal",
            pan: pan,
+           dob: getDateFormat(new Date(dob)),
+           name:firstName+" "+lastName,
+           email : email,
+           username : username,
+           loginId : user.loginDetails.id,
+           domain : domain
            // empSalary: null
           }
         
@@ -235,10 +272,11 @@ export default function EditUser({match}) {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                value={email}
                 onChange={handleChange}
               />
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
@@ -246,10 +284,10 @@ export default function EditUser({match}) {
                 id="username"
                 label="Username"
                 name="username"
-                //autoComplete="username"
+                value = {username}
                 onChange={handleChange}
               />
-            </Grid>
+            </Grid> */}
             {/* <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -282,9 +320,9 @@ export default function EditUser({match}) {
               <KeyboardDatePicker
           fullWidth
           id="date-picker-dialog"
-          label="Date of Joining"
+          label="Date of Birth"
           format="MM/dd/yyyy"
-          value={doj}
+          value={dob}
           name='doj'
           onChange={handleDateChange}
           KeyboardButtonProps={{
@@ -293,6 +331,26 @@ export default function EditUser({match}) {
         />
         </MuiPickersUtilsProvider>
             </Grid>
+
+            {loginUser.roles.includes('ROLE_ADMIN') &&
+
+            (
+              <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                
+                label="Domain"
+                name="domain"
+                value={domain}
+                onChange={handleChange}
+              />
+            </Grid>
+            )
+
+
+            }
             
           </Grid>
           <Button
@@ -300,7 +358,7 @@ export default function EditUser({match}) {
             // fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
+            className={classes.cancel}
             onClick={handleCancel}
           >
            Cancel
@@ -310,7 +368,7 @@ export default function EditUser({match}) {
             // fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
+            className={classes.update}
             
           >
            Update
