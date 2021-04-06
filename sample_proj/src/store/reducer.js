@@ -38,7 +38,13 @@ const reducer = (state = initialState, { type, payload }) => {
 
     case "SIGNUP_SUCCESS":
       return {
-        message: payload.message,
+        signedUp : payload.signedUp,
+        alert: payload.alert,
+      };
+
+      case "SIGNUP_FAILED":
+      return {
+        alert: payload.alert,
       };
 
     case "DELETE_EMPLOYEE_SUCCESS":

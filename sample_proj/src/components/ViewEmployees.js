@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "left",
     color: "white",
     backgroundColor: "#536dfe",
-    //top: 63,
+    top: 63,
   },
   sticky: {
     position: "sticky",

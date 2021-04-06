@@ -15,6 +15,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import DateFnsUtils from '@date-io/date-fns';
+import 'date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 
 function Copyright() {
   return (
@@ -63,6 +69,8 @@ export default function EditUser({match}) {
     const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [pan, setPan] = React.useState('')
+    const [doj, setDoj] = React.useState(Date.now())
+
 
     const history = useHistory()
 
@@ -73,9 +81,16 @@ export default function EditUser({match}) {
     useEffect(() => {
 
         let loginUser = JSON.parse(localStorage.getItem('user'));
+
+
         let id = match.params.id 
 
-         if(loginUser.roles[0]==='ROLE_ADMIN' || loginUser.id === id)
+        console.log(loginUser)
+        console.log("id" + id)
+
+       // console.log(loginUser.id === id)
+
+         if(loginUser.roles[0]==='ROLE_ADMIN' || loginUser.id === parseInt(id))
           dispatch(actions.fetchUser(id))
       
         },[]);
@@ -105,9 +120,17 @@ export default function EditUser({match}) {
         
           },[user]);
 
+          const handleDateChange = (date) => {
+            setDoj(date);
+          };
+
         const handleChange = (e) =>{
 
+          console.log(e.target)
+
           const {name,value} = e.target
+
+          
       
           if(name==='firstName')
           setFirstName(value)
@@ -147,7 +170,7 @@ export default function EditUser({match}) {
         
       }
 
-    if(user===undefined || user.empName===undefined)
+    if(user==null || user===undefined || user.empName===undefined)
     {
       console.log('checking for user....')
       return(
@@ -254,12 +277,23 @@ export default function EditUser({match}) {
                 onChange={handleChange}
               />
               </Grid>
-            {/* <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid> */}
+            <Grid item xs={12}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+          fullWidth
+          id="date-picker-dialog"
+          label="Date of Joining"
+          format="MM/dd/yyyy"
+          value={doj}
+          name='doj'
+          onChange={handleDateChange}
+          KeyboardButtonProps={{
+            'aria-label': 'change date',
+          }}
+        />
+        </MuiPickersUtilsProvider>
+            </Grid>
+            
           </Grid>
           <Button
             

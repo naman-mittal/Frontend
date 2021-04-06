@@ -25,6 +25,20 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Redirect } from "react-router";
 
+
+
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import FilledInput from '@material-ui/core/FilledInput';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -73,11 +87,16 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  password : {
+    margin :theme.spacing(2,0,2)
+  }
 }));
 
 export default function SignIn() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+
+  const [showPassword, setShowPassword] = React.useState(false);
   
 
   const [open, setOpen] = React.useState(false);
@@ -149,6 +168,12 @@ export default function SignIn() {
 
   const classes = useStyles();
 
+  const handleClickShowPassword = () =>{
+
+    setShowPassword(!showPassword)
+
+  }
+
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -174,7 +199,7 @@ export default function SignIn() {
               autoFocus
               onChange={handleChange}
             />
-            <TextField
+            {/* <TextField
               variant="outlined"
               margin="normal"
               required
@@ -183,14 +208,38 @@ export default function SignIn() {
               label="Password"
               type="password"
               id="password"
+              value={password}
               autoComplete="current-password"
               onChange={handleChange}
               
-            />
-            <FormControlLabel
+            /> */}
+             <FormControl  fullWidth className={classes.password}  variant="outlined">
+            <InputLabel htmlFor="outlined-adornment-password">Password *</InputLabel>
+            <OutlinedInput
+            id="outlined-adornment-password"
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            name='password'
+            onChange={handleChange}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                   onClick={handleClickShowPassword}
+                  // onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
+            labelWidth={90}
+          />
+          </FormControl>
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
 
             <Button
               type="submit"

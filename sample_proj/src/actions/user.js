@@ -197,7 +197,7 @@ export const login = (username,password) => {
 }
 
  const signup = () =>{
-    return {type : "SIGNUP_SUCCESS",payload : {message : 'User registered successfully'}}
+    return {type : "SIGNUP_SUCCESS",payload : {signedUp : true, alert : {type : 'success',message : 'User registered successfully'}}}
 }
 
 export const signUp = (user) => {
@@ -216,14 +216,27 @@ export const signUp = (user) => {
     };
     return dispatch => {
 
-       
+       let code = 0
 
         fetch('http://localhost:8080/api/v1/signup', requestOptions)
             .then(res => {
                 console.log(res);
                 //console.log(res.message);
-                // if(res.status!==201)
-                // return Promise.reject("Bad credentials");
+                code = res.status
+                if(res.status!==200)
+                {
+
+                  // let result = res.text()
+                //    result.then(res=>{
+                //     return res   
+                //    })
+                    // return Promise.reject( result.then(res=>{
+                    //     return res   
+                    //    }));
+
+                       return res.text()
+                }
+                
                 return res.json();
             })
             .then(res => {
@@ -236,13 +249,15 @@ export const signUp = (user) => {
                 
                     //console.log("no error")
                     //localStorage.setItem('user',JSON.stringify(user))
-
+                if(code===200)
                 dispatch(signup());
-                
+                else
+                return Promise.reject(res)
                 
             })
             .catch((error) => {
                 console.error('Error:', error);
+                dispatch({type : "SIGNUP_FAILED",payload : {alert : {type : 'error',message : error}}})
               });
 
     }

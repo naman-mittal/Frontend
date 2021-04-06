@@ -3,8 +3,10 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -20,13 +22,17 @@ const validEmailRegex = RegExp(
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
 );
 
-const validNameRegex = RegExp(/^[A-Z][a-z]{4,}$/);
+const validNameRegex = RegExp(/^[A-Z][a-z]{3,}$/);
 
 const validateForm = (errors) => {
   let valid = true;
   Object.values(errors).forEach((val) => val.length > 0 && (valid = false));
   return valid;
 };
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 function Copyright() {
   return (
@@ -54,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(2),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -69,14 +75,22 @@ export default function SignUp() {
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [openSnack, setOpenSnack] = React.useState(false)
+  const [open, setOpen] = React.useState(false)
 
   const [errors, setErrors] = React.useState({
     email: "",
     password: "",
+    confirmPassword: "",
     username: "",
     firstName: "",
     lastName: "",
   });
+
+  const alert = useSelector(state => state.reducer.alert)
+
+  const signedUp = useSelector(state => state.reducer.signedUp)
 
   const history = useHistory();
 
@@ -108,8 +122,22 @@ export default function SignUp() {
     } else if (name === "password") {
       setPassword(value);
 
+    
+
       err.password =
         value.length >= 8 ? "" : "Password must be 8 character long";
+    }
+    else if (name === "confirmPassword") {
+      
+      setConfirmPassword(value)
+
+      
+
+        err.confirmPassword = value.localeCompare(password)===0 ? "" : "Password doesn't match"
+
+      
+
+     
     }
 
     setErrors(err);
@@ -118,11 +146,20 @@ export default function SignUp() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // let err = errors
+
+    // err.confirmPassword = confirmPassword!==password ? "Password doesn't match" : ""
+    
+    // setErrors(err)
+
     if (validateForm(errors)) {
       console.log("signing up....");
 
       if(firstName&&lastName&&username&&email&&password)
       {
+
+
+        setOpen(true)
         const signupRequest = {
           name: firstName + " " + lastName,
           email: email,
@@ -130,8 +167,6 @@ export default function SignUp() {
           password: password,
         };
         dispatch(actions.signUp(signupRequest));
-  
-        history.push("/signin");
       }
       else
       {
@@ -144,12 +179,43 @@ export default function SignUp() {
     }
   };
 
-  // useEffect(() => {
-  //   console.log("errors = " + errors);
-  //   console.log("errors = " + errors.email.length);
-  // });
+  useEffect(() => {
+    
+    if(signedUp)
+    {
+      history.push("/signin");
+    }
+
+  },[signedUp,history]);
+
+  useEffect(() => {
+
+    if(alert)
+    {
+      setOpen(false)
+      setOpenSnack(true)
+    }
+  
+    },[alert]);
+
+    const handleCloseSnack = () =>{
+      setOpenSnack(false)
+    }
+
   return (
     <Container component="main" maxWidth="xs">
+       <Snackbar
+              open={openSnack}
+              autoHideDuration={6000}
+              onClose={handleCloseSnack}
+            >
+              <Alert onClose={handleCloseSnack} severity={alert?alert.type:'success'}>
+                {alert ? alert.message : 'sample'}
+              </Alert>
+            </Snackbar>
+            <Backdrop className={classes.backdrop} open={open} >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -300,6 +366,31 @@ export default function SignUp() {
                 />
               )}
             </Grid>
+            <Grid item xs={12}>
+              {errors.confirmPassword.length > 0 ? (
+                <TextField
+                  variant="outlined"
+                  required
+                  error
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  onChange={handleChange}
+                  helperText={errors.confirmPassword}
+                />
+              ) : (
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  onChange={handleChange}
+                />
+              )}
+            </Grid>
             {/* <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
@@ -325,9 +416,9 @@ export default function SignUp() {
           </Grid>
         </Grid>
       </div>
-      <Box mt={5}>
+      {/* <Box mt={5}>
         <Copyright />
-      </Box>
+      </Box> */}
     </Container>
   );
 }
