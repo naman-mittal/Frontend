@@ -25,7 +25,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import NumberFormat from 'react-number-format';
+import NumberFormat from "react-number-format";
 
 // function Copyright() {
 //   return (
@@ -39,6 +39,22 @@ import NumberFormat from 'react-number-format';
 //     </Typography>
 //   );
 // }
+
+const validEmailRegex = RegExp(
+  /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+);
+
+const validNameRegex = RegExp(/^[A-Z][a-z]{3,}$/);
+
+const validPanRegex = RegExp(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/);
+
+const validDetailRegex = RegExp(/^[a-z A-Z]*$/);
+
+const validateForm = (errors) => {
+  let valid = true;
+  Object.values(errors).forEach((val) => val.length > 0 && (valid = false));
+  return valid;
+};
 
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
@@ -61,8 +77,6 @@ function NumberFormatCustom(props) {
     />
   );
 }
-
-
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -118,12 +132,23 @@ export default function EditUser({ match }) {
 
   // })
 
+  const [errors, setErrors] = React.useState({
+    email: "",
+    firstName: "",
+    lastName: "",
+    pan: "",
+    designation: "",
+    domain: "",
+    role: "",
+    salary: "",
+  });
+
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [pan, setPan] = React.useState("");
+  const [pan, setPan] = React.useState(null);
   const [doj, setDoj] = React.useState(null);
   const [dob, setDob] = React.useState(null);
   const [domain, setDomain] = React.useState(null);
@@ -168,23 +193,21 @@ export default function EditUser({ match }) {
   }, [alert]);
 
   useEffect(() => {
-   // console.log("inside user effect....");
-
-    
+    // console.log("inside user effect....");
 
     if (user != null) {
       console.log("setting PAN to " + user.empPAN);
 
-     setPan(user.empPAN)
-     setFirstName(user.empName.split(" ")[0])
-      setLastName(user.empName.split(" ")[1])
-      setEmail(user.empEmailId)
-      setDob(user.empDOB)
-      setDoj(user.empDOJ)
-      setDomain(user.empDomain)
-      setDesignation(user.empDesignation)
-      setRole(user.loginDetails.role)
-      setSalary(user.empSalary)
+      setPan(user.empPAN);
+      setFirstName(user.empName.split(" ")[0]);
+      setLastName(user.empName.split(" ")[1]);
+      setEmail(user.empEmailId);
+      setDob(user.empDOB);
+      setDoj(user.empDOJ);
+      setDomain(user.empDomain);
+      setDesignation(user.empDesignation);
+      setRole(user.loginDetails.role);
+      setSalary(user.empSalary);
     }
   }, [user]);
 
@@ -195,65 +218,98 @@ export default function EditUser({ match }) {
   // },[values])
 
   const handleDobChange = (date) => {
-   setDob(date)
+    setDob(date);
   };
 
   const handleDojChange = (date) => {
-    setDoj(date)
-   };
+    setDoj(date);
+  };
 
   const handleChange = (e) => {
-    console.log(e.target);
+    //console.log(e.target);
 
     const { name, value } = e.target;
 
+    let err = errors;
 
+    if (name === "firstName") {
+      setFirstName(value);
 
-    if (name === "firstName"){ 
-      
-    setFirstName(value)
-    }
-    else if (name === "lastName"){
-      setLastName(value)
-    }
-    else if (name === "email") {
-     setEmail(value)
-    }
-    else if (name === "pan") {
-     setPan(value)
-    }
-    else if (name === "domain") {
+      err.firstName = validNameRegex.test(value)
+        ? ""
+        : "Basic English rule.... Duh!";
+    } else if (name === "lastName") {
+      setLastName(value);
+      err.lastName = validNameRegex.test(value)
+        ? ""
+        : "Basic English rule.... Duh!";
+    } else if (name === "email") {
+      setEmail(value);
+      err.email = validEmailRegex.test(value) ? "" : "Email is not valid!";
+    } else if (name === "pan") {
+      if (value.length === 0) {
+        setPan(null);
 
-      if(value.length===0)
-      setDomain(null)
-      else
-      setDomain(value)
-    }
-    else if (name === "designation") {
+        err.pan = "";
+      } else {
+        setPan(value);
+        err.pan = validPanRegex.test(value) ? "" : "Pan is not valid!";
+      }
+    } else if (name === "domain") {
+      if (value.length === 0) {
+        setDomain(null);
 
-      if(value.length===0)
-      setDesignation(null)
-      else
-      setDesignation(value)
-    }
-    else if (name === "role") {
+        err.domain = "";
+      } else {
+        setDomain(value);
 
-      if(value.length===0)
-      setRole(null)
-      else
-      setRole(value)
-    }
-    else if (name === "salary") {
+        err.domain = validDetailRegex.test(value)
+          ? value.length >= 4
+            ? ""
+            : "domain must be 4 characters long"
+          : "Only alphabets allowed";
+      }
+    } else if (name === "designation") {
+      if (value.length === 0) {
+        setDesignation(null);
 
-      console.log('salary = ' + value)
-      console.log(typeof(value))
-      if(value.length===0)
-      setSalary(null)
-      else
-      setSalary(value)
+        err.designation = "";
+      } else {
+        setDesignation(value);
+
+        err.designation = validDetailRegex.test(value)
+          ? value.length >= 4
+            ? ""
+            : "designation must be 4 characters long"
+          : "Only alphabets allowed";
+      }
+    } else if (name === "role") {
+      if (value.length === 0) {
+        setRole(null);
+
+        err.role = "";
+      } else {
+        setRole(value);
+
+        err.role = validDetailRegex.test(value)
+          ? value.length >= 4
+            ? ""
+            : "role must be 4 characters long"
+          : "Only alphabets allowed";
+      }
+    } else if (name === "salary") {
+      if (value.length === 0) {
+        setSalary(null);
+        err.salary = "";
+      } else {
+        setSalary(value);
+
+        err.salary = value.length >= 4 ? "" : "should be greater than 1000";
+      }
     }
 
     // setValues(vals)
+    setErrors(err);
 
     //  console.log("values = " + JSON.stringify(values))
   };
@@ -274,28 +330,31 @@ export default function EditUser({ match }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    setOpen(true);
+    if (validateForm(errors)) {
+      if (firstName && lastName && email) {
+        setOpen(true);
 
-    const updateRequest = {
-      // empDOB: null,
-      // empDOJ: null,
-     designation: designation,
-     role : role,
-      // empDomain: null,
-      // empEmailId: "naman@gmail.com",
-      id: user.empId,
-      //empName: "Naman Mittal",
-      pan: pan,
-      dob: getDateFormat(new Date(dob)),
-      doj: getDateFormat(new Date(doj)),
-      name: firstName + " " + lastName,
-      email: email,
-      loginId: user.loginDetails.id,
-      domain: domain,
-      salary: salary
-    };
+        const updateRequest = {
+          designation: designation,
+          role: role,
+          id: user.empId,
+          pan: pan,
+          dob: getDateFormat(new Date(dob)),
+          doj: getDateFormat(new Date(doj)),
+          name: firstName + " " + lastName,
+          email: email,
+          loginId: user.loginDetails.id,
+          domain: domain,
+          salary: salary,
+        };
 
-    dispatch(actions.editUser(updateRequest));
+        dispatch(actions.editUser(updateRequest));
+      } else {
+        window.alert("name and email cannot be null");
+      }
+    } else {
+      window.alert("Invalid form");
+    }
   };
 
   if (user == null || user === undefined || user.empName === undefined) {
@@ -343,83 +402,124 @@ export default function EditUser({ match }) {
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-                value={firstName}
-                onChange={handleChange}
-              />
+              {errors.firstName.length > 0 ? (
+                <TextField
+                  autoComplete="fname"
+                  name="firstName"
+                  variant="outlined"
+                  required
+                  error
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                  value={firstName}
+                  onChange={handleChange}
+                  helperText={errors.firstName}
+                />
+              ) : (
+                <TextField
+                  autoComplete="fname"
+                  name="firstName"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                  value={firstName}
+                  onChange={handleChange}
+                />
+              )}
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                value={lastName}
-                onChange={handleChange}
-              />
+              {errors.lastName.length > 0 ? (
+                <TextField
+                  variant="outlined"
+                  required
+                  error
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  value={lastName}
+                  onChange={handleChange}
+                  helperText={errors.lastName}
+                />
+              ) : (
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  value={lastName}
+                  onChange={handleChange}
+                />
+              )}
             </Grid>
 
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                value={email}
-                onChange={handleChange}
-              />
+              {errors.email.length > 0 ? (
+                <TextField
+                  variant="outlined"
+                  required
+                  error
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={handleChange}
+                  helperText={errors.email}
+                />
+              ) : (
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={handleChange}
+                />
+              )}
             </Grid>
-            {/* <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                value = {username}
-                onChange={handleChange}
-              />
-            </Grid> */}
-            {/* <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                onChange={handleChange}
-              />
-              
-            </Grid> */}
+
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="pan"
-                label="PAN"
-                type="pan"
-                id="pan"
-                autoComplete="pan"
-                value={pan}
-                onChange={handleChange}
-              />
+              {errors.pan.length > 0 ? (
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  error
+                  name="pan"
+                  label="PAN"
+                  type="pan"
+                  id="pan"
+                  autoComplete="pan"
+                  value={pan}
+                  onChange={handleChange}
+                  helperText={errors.pan}
+                />
+              ) : (
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="pan"
+                  label="PAN"
+                  type="pan"
+                  id="pan"
+                  autoComplete="pan"
+                  value={pan}
+                  onChange={handleChange}
+                />
+              )}
             </Grid>
             <Grid item xs={12}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -440,99 +540,140 @@ export default function EditUser({ match }) {
 
             {loginUser.roles.includes("ROLE_ADMIN") && (
               <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  label="Domain"
-                  name="domain"
-                  value={domain}
-                  onChange={handleChange}
-                />
+                {errors.designation.length > 0 ? (
+                  <TextField
+                    variant="outlined"
+                    required
+                    error
+                    fullWidth
+                    label="Designation"
+                    name="designation"
+                    value={designation}
+                    onChange={handleChange}
+                    helperText={errors.designation}
+                  />
+                ) : (
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    label="Designation"
+                    name="designation"
+                    value={designation}
+                    onChange={handleChange}
+                  />
+                )}
               </Grid>
-
-              
-
             )}
 
-{loginUser.roles.includes("ROLE_ADMIN") && (
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  label="Designation"
-                  name="designation"
-                  value={designation}
-                  onChange={handleChange}
-                />
+            {loginUser.roles.includes("ROLE_ADMIN") && (
+              <Grid item xs={12} sm={6}>
+                {errors.domain.length > 0 ? (
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    error
+                    label="Domain"
+                    name="domain"
+                    value={domain}
+                    onChange={handleChange}
+                    helperText={errors.domain}
+                  />
+                ) : (
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    label="Domain"
+                    name="domain"
+                    value={domain}
+                    onChange={handleChange}
+                  />
+                )}
               </Grid>
-
-              
-
             )}
 
-{loginUser.roles.includes("ROLE_ADMIN") && (
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  label="Role"
-                  name="role"
-                  value={role}
-                  onChange={handleChange}
-                />
+            {loginUser.roles.includes("ROLE_ADMIN") && (
+              <Grid item xs={12} sm={6}>
+                {errors.role.length > 0 ? (
+                  <TextField
+                    variant="outlined"
+                    required
+                    error
+                    fullWidth
+                    label="Role"
+                    name="role"
+                    value={role}
+                    onChange={handleChange}
+                    helperText={errors.role}
+                  />
+                ) : (
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    label="Role"
+                    name="role"
+                    value={role}
+                    onChange={handleChange}
+                  />
+                )}
               </Grid>
-
-              
-
             )}
 
-{loginUser.roles.includes("ROLE_ADMIN") && (
+            {loginUser.roles.includes("ROLE_ADMIN") && (
               <Grid item xs={12}>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                  fullWidth
-                  id="date-picker-dialog"
-                  label="Date of Joining"
-                  format="MM/dd/yyyy"
-                  value={doj}
-                  name="doj"
-                  onChange={handleDojChange}
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                />
-              </MuiPickersUtilsProvider>
-            </Grid>
-
-              
-
-            )}
-
-
-
-{loginUser.roles.includes("ROLE_ADMIN") && (
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  label="Salary"
-                  name="salary"
-                  value={salary}
-                  onChange={handleChange}
-                  InputProps={{
-                    inputComponent: NumberFormatCustom,
-                  }}
-                />
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    fullWidth
+                    id="date-picker-dialog"
+                    label="Date of Joining"
+                    format="MM/dd/yyyy"
+                    value={doj}
+                    name="doj"
+                    onChange={handleDojChange}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
               </Grid>
-
-              
-
             )}
 
+            {loginUser.roles.includes("ROLE_ADMIN") && (
+              <Grid item xs={12}>
+                {errors.salary.length > 0 ? (
+                  <TextField
+                    variant="outlined"
+                    required
+                    error
+                    fullWidth
+                    label="Salary"
+                    name="salary"
+                    value={salary}
+                    onChange={handleChange}
+                    InputProps={{
+                      inputComponent: NumberFormatCustom,
+                    }}
+                    helperText={errors.salary}
+                  />
+                ) : (
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    label="Salary"
+                    name="salary"
+                    value={salary}
+                    onChange={handleChange}
+                    InputProps={{
+                      inputComponent: NumberFormatCustom,
+                    }}
+                  />
+                )}
+              </Grid>
+            )}
           </Grid>
           <Button
             // fullWidth
