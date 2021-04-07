@@ -1,238 +1,344 @@
-import React, { useEffect } from 'react'
-import { useSelector,useDispatch } from 'react-redux'
-import { useHistory } from 'react-router';
-import * as actions from '../actions/user'
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import EditIcon from '@material-ui/icons/Edit';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import DateFnsUtils from '@date-io/date-fns';
-import 'date-fns';
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router";
+import * as actions from "../actions/user";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import EditIcon from "@material-ui/icons/Edit";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import DateFnsUtils from "@date-io/date-fns";
+import "date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
-} from '@material-ui/pickers';
+} from "@material-ui/pickers";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import NumberFormat from 'react-number-format';
 
-function Copyright() {
+// function Copyright() {
+//   return (
+//     <Typography variant="body2" color="textSecondary" align="center">
+//       {"Copyright © "}
+//       <Link color="inherit" href="https://material-ui.com/">
+//         Your Website
+//       </Link>{" "}
+//       {new Date().getFullYear()}
+//       {"."}
+//     </Typography>
+//   );
+// }
+
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, ...other } = props;
+
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+      prefix="₹ "
+    />
   );
+}
+
+
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     //marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
   cancel: {
-    margin: theme.spacing(3, 4,2, 4),
+    margin: theme.spacing(3, 4, 2, 4),
   },
-  update:{
-    margin: theme.spacing(3, 0, 2,1),
-  }
+  update: {
+    margin: theme.spacing(3, 0, 2, 1),
+  },
+
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
+  },
 }));
 
-export default function EditUser({match}) {
+export default function EditUser({ match }) {
+  const classes = useStyles();
 
-    const classes = useStyles()
+  const user = useSelector((state) => state.reducer.user);
 
-    const user = useSelector(state => state.reducer.user)
+  const alert = useSelector((state) => state.reducer.alert);
 
-    const loginUser = JSON.parse(localStorage.getItem('user'))
+  const loginUser = JSON.parse(localStorage.getItem("user"));
 
-    const updated = useSelector(state => state.reducer.updated)
+  const updated = useSelector((state) => state.reducer.updated);
 
-    const [firstName, setFirstName] = React.useState('')
-    const [lastName, setLastName] = React.useState('')
-    const [username, setUsername] = React.useState('')
-    const [email, setEmail] = React.useState('')
-    const [password, setPassword] = React.useState('')
-    const [pan, setPan] = React.useState('')
-    const [doj, setDoj] = React.useState(Date.now())
-    const [dob, setDob] = React.useState(Date.now())
-    const [domain, setDomain] = React.useState(null)
+  // const [values,setValues] = React.useState({
+  //   firstName : '',
+  //   lastName : '',
+  //   email : '',
+  //   pan : '',
+  //   dob : null,
+  //   domain : null,
+  //   doj : null
+
+  // })
+
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [pan, setPan] = React.useState("");
+  const [doj, setDoj] = React.useState(null);
+  const [dob, setDob] = React.useState(null);
+  const [domain, setDomain] = React.useState(null);
+  const [designation, setDesignation] = React.useState(null);
+  const [role, setRole] = React.useState(null);
+  const [salary, setSalary] = React.useState(null);
+
+  const [openSnack, setOpenSnack] = React.useState(false);
+
+  const [open, setOpen] = React.useState(false);
+
+  const history = useHistory();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    let loginUser = JSON.parse(localStorage.getItem("user"));
+
+    let id = match.params.id;
+
+    console.log(loginUser);
+    console.log("id" + id);
+
+    // console.log(loginUser.id === id)
+
+    if (loginUser.roles[0] === "ROLE_ADMIN" || loginUser.id === parseInt(id))
+      dispatch(actions.fetchUser(id));
+  }, []);
+
+  useEffect(() => {
+    if (updated) {
+      console.log(history);
+      history.goBack();
+    }
+  }, [updated, history]);
+
+  useEffect(() => {
+    if (alert && alert.type === "error") {
+      setOpen(false);
+      setOpenSnack(true);
+    }
+  }, [alert]);
+
+  useEffect(() => {
+   // console.log("inside user effect....");
+
+    
+
+    if (user != null) {
+      console.log("setting PAN to " + user.empPAN);
+
+     setPan(user.empPAN)
+     setFirstName(user.empName.split(" ")[0])
+      setLastName(user.empName.split(" ")[1])
+      setEmail(user.empEmailId)
+      setDob(user.empDOB)
+      setDoj(user.empDOJ)
+      setDomain(user.empDomain)
+      setDesignation(user.empDesignation)
+      setRole(user.loginDetails.role)
+      setSalary(user.empSalary)
+    }
+  }, [user]);
+
+  // useEffect(()=>{
+
+  //   console.log("values = " + JSON.stringify(values))
+
+  // },[values])
+
+  const handleDobChange = (date) => {
+   setDob(date)
+  };
+
+  const handleDojChange = (date) => {
+    setDoj(date)
+   };
+
+  const handleChange = (e) => {
+    console.log(e.target);
+
+    const { name, value } = e.target;
 
 
-    const history = useHistory()
 
-    const dispatch = useDispatch();  
-
-   
-
-    useEffect(() => {
-
-        let loginUser = JSON.parse(localStorage.getItem('user'));
-
-
-        let id = match.params.id 
-
-        console.log(loginUser)
-        console.log("id" + id)
-
-       // console.log(loginUser.id === id)
-
-         if(loginUser.roles[0]==='ROLE_ADMIN' || loginUser.id === parseInt(id))
-          dispatch(actions.fetchUser(id))
+    if (name === "firstName"){ 
       
-        },[]);
+    setFirstName(value)
+    }
+    else if (name === "lastName"){
+      setLastName(value)
+    }
+    else if (name === "email") {
+     setEmail(value)
+    }
+    else if (name === "pan") {
+     setPan(value)
+    }
+    else if (name === "domain") {
 
-        useEffect(() => {
+      if(value.length===0)
+      setDomain(null)
+      else
+      setDomain(value)
+    }
+    else if (name === "designation") {
 
-          if(updated)
-  {
-    console.log(history)
-    history.goBack()
-  }
-        
-          },[updated,history]);
+      if(value.length===0)
+      setDesignation(null)
+      else
+      setDesignation(value)
+    }
+    else if (name === "role") {
 
-        useEffect(() => {
+      if(value.length===0)
+      setRole(null)
+      else
+      setRole(value)
+    }
+    else if (name === "salary") {
 
-          console.log('inside user effect....')
-
-          if(user!=null)
-          {
-            console.log('setting PAN to ' + user.empPAN)
-          setPan(user.empPAN)
-          setFirstName(user.empName.split(" ")[0])
-          setLastName(user.empName.split(" ")[1])
-          setEmail(user.empEmailId)
-          setUsername(user.loginDetails.userName)
-          setDob(user.empDOB)
-          setDomain(user.empDomain)
-          }
-          
-        
-          },[user]);
-
-          const handleDateChange = (date) => {
-            setDob(date);
-            console.log("date = "+ date)
-            console.log(typeof(date))
-          };
-
-        const handleChange = (e) =>{
-
-          console.log(e.target)
-
-          const {name,value} = e.target
-
-          
-      
-          if(name==='firstName')
-          setFirstName(value)
-          else if(name==='lastName')
-          setLastName(value)
-          else if(name==='email')
-          setEmail(value)
-          else if(name==='username')
-          setUsername(value)
-          else if(name==='password')
-          setPassword(value)
-          else if(name==='pan')
-          setPan(value)
-          else if(name==='domain')
-          {
-            setDomain(value)
-          }
-      
-      
-        }
-
-
-        const getDateFormat = (date) =>{
-          console.log("month = " + date.getMonth())
-          console.log("year = " + date.getFullYear())
-          console.log("day = " + date.getDate())
-
-          let year = date.getFullYear()
-          let month = date.getMonth()>9?date.getMonth()+1:"0"+(date.getMonth()+1)
-          let day = date.getDate()>9?date.getDate():"0"+date.getDate()
-
-          return month+"/"+day+"/"+year
-
-        }
-
-        const handleSubmit= (e) => {
-          e.preventDefault();
-      
-          console.log("signing up....")
-      
-          const updateRequest = {
-            // empDOB: null,
-            // empDOJ: null,
-            // empDesignation: null,
-            // empDomain: null,
-            // empEmailId: "naman@gmail.com",
-            id: user.empId,
-            //empName: "Naman Mittal",
-           pan: pan,
-           dob: getDateFormat(new Date(dob)),
-           name:firstName+" "+lastName,
-           email : email,
-           username : username,
-           loginId : user.loginDetails.id,
-           domain : domain
-           // empSalary: null
-          }
-        
-         dispatch(actions.editUser(updateRequest))
-      
-        
-      }
-
-    if(user==null || user===undefined || user.empName===undefined)
-    {
-      console.log('checking for user....')
-      return(
-        <h1>
-        Loading....
-        </h1>
-      )
+      console.log('salary = ' + value)
+      console.log(typeof(value))
+      if(value.length===0)
+      setSalary(null)
+      else
+      setSalary(value)
     }
 
+    // setValues(vals)
 
-  const handleCancel = ()=>{
-    console.log(history)
-    history.goBack()
+    //  console.log("values = " + JSON.stringify(values))
+  };
+
+  const getDateFormat = (date) => {
+    console.log("month = " + date.getMonth());
+    console.log("year = " + date.getFullYear());
+    console.log("day = " + date.getDate());
+
+    let year = date.getFullYear();
+    let month =
+      date.getMonth() > 9 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1);
+    let day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate();
+
+    return month + "/" + day + "/" + year;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setOpen(true);
+
+    const updateRequest = {
+      // empDOB: null,
+      // empDOJ: null,
+     designation: designation,
+     role : role,
+      // empDomain: null,
+      // empEmailId: "naman@gmail.com",
+      id: user.empId,
+      //empName: "Naman Mittal",
+      pan: pan,
+      dob: getDateFormat(new Date(dob)),
+      doj: getDateFormat(new Date(doj)),
+      name: firstName + " " + lastName,
+      email: email,
+      loginId: user.loginDetails.id,
+      domain: domain,
+      salary: salary
+    };
+
+    dispatch(actions.editUser(updateRequest));
+  };
+
+  if (user == null || user === undefined || user.empName === undefined) {
+    console.log("checking for user....");
+    return <h1>Loading....</h1>;
   }
 
- 
-    return (
-        <Container component="main" maxWidth="xs">
+  const handleCancel = () => {
+    console.log(history);
+    history.goBack();
+  };
+
+  const handleCloseSnack = () => {
+    setOpenSnack(false);
+  };
+
+  return (
+    <Container component="main" maxWidth="xs">
+      {alert && (
+        <Snackbar
+          open={openSnack}
+          autoHideDuration={6000}
+          onClose={handleCloseSnack}
+        >
+          <Alert
+            onClose={handleCloseSnack}
+            severity={alert ? alert.type : "success"}
+          >
+            {alert ? alert.message : "sample"}
+          </Alert>
+        </Snackbar>
+      )}
+
+      <Backdrop className={classes.backdrop} open={open}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <EditIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-         Edit profile 
+          Edit profile
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -262,7 +368,7 @@ export default function EditUser({match}) {
                 onChange={handleChange}
               />
             </Grid>
-            
+
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -314,54 +420,128 @@ export default function EditUser({match}) {
                 value={pan}
                 onChange={handleChange}
               />
-              </Grid>
+            </Grid>
             <Grid item xs={12}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-          fullWidth
-          id="date-picker-dialog"
-          label="Date of Birth"
-          format="MM/dd/yyyy"
-          value={dob}
-          name='doj'
-          onChange={handleDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
-        </MuiPickersUtilsProvider>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  fullWidth
+                  id="date-picker-dialog"
+                  label="Date of Birth"
+                  format="MM/dd/yyyy"
+                  value={dob}
+                  name="dob"
+                  onChange={handleDobChange}
+                  KeyboardButtonProps={{
+                    "aria-label": "change date",
+                  }}
+                />
+              </MuiPickersUtilsProvider>
             </Grid>
 
-            {loginUser.roles.includes('ROLE_ADMIN') &&
-
-            (
+            {loginUser.roles.includes("ROLE_ADMIN") && (
               <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                
-                label="Domain"
-                name="domain"
-                value={domain}
-                onChange={handleChange}
-              />
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Domain"
+                  name="domain"
+                  value={domain}
+                  onChange={handleChange}
+                />
+              </Grid>
+
+              
+
+            )}
+
+{loginUser.roles.includes("ROLE_ADMIN") && (
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Designation"
+                  name="designation"
+                  value={designation}
+                  onChange={handleChange}
+                />
+              </Grid>
+
+              
+
+            )}
+
+{loginUser.roles.includes("ROLE_ADMIN") && (
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Role"
+                  name="role"
+                  value={role}
+                  onChange={handleChange}
+                />
+              </Grid>
+
+              
+
+            )}
+
+{loginUser.roles.includes("ROLE_ADMIN") && (
+              <Grid item xs={12}>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  fullWidth
+                  id="date-picker-dialog"
+                  label="Date of Joining"
+                  format="MM/dd/yyyy"
+                  value={doj}
+                  name="doj"
+                  onChange={handleDojChange}
+                  KeyboardButtonProps={{
+                    "aria-label": "change date",
+                  }}
+                />
+              </MuiPickersUtilsProvider>
             </Grid>
-            )
+
+              
+
+            )}
 
 
-            }
-            
+
+{loginUser.roles.includes("ROLE_ADMIN") && (
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Salary"
+                  name="salary"
+                  value={salary}
+                  onChange={handleChange}
+                  InputProps={{
+                    inputComponent: NumberFormatCustom,
+                  }}
+                />
+              </Grid>
+
+              
+
+            )}
+
           </Grid>
           <Button
-            
             // fullWidth
             variant="contained"
             color="primary"
             className={classes.cancel}
             onClick={handleCancel}
           >
-           Cancel
+            Cancel
           </Button>
           <Button
             type="submit"
@@ -369,23 +549,21 @@ export default function EditUser({match}) {
             variant="contained"
             color="primary"
             className={classes.update}
-            
           >
-           Update
+            Update
           </Button>
-          </form>
-          {/* <Grid container justify="flex-end">
+        </form>
+        {/* <Grid container justify="flex-end">
             <Grid item>
               <Link href="/signin" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
           </Grid> */}
-        
       </div>
       {/* <Box mt={5}>
         <Copyright />
       </Box> */}
     </Container>
-    )
+  );
 }

@@ -36,8 +36,8 @@ export const fetchUser = (id) => {
 
 }
 
-const updateUser = () =>{
-    return {type : "UPDATE_USER",payload : {message : 'Updated Successfully'}}
+const updateUser = (type,alert) =>{
+    return {type ,payload : {alert}}
 }
 
 export const editUser = (updateRequest) => {
@@ -56,13 +56,24 @@ export const editUser = (updateRequest) => {
     body : JSON.stringify(updateRequest)
     };
     return dispatch => {
+        let code = 0
         fetch('http://localhost:8080/api/v1/employee', requestOptions)
             .then(res => {
                 console.log(res);
-                dispatch(updateUser());
+                code = res.status
+
+                if(code!==204)
+                {
+                    return res.text()
+                }
+                dispatch(updateUser('UPDATE_USER_SUCCESS',{type : 'success' , message : 'updated successfully'}));
+            })
+            .then(res=>{
+                if(code!==204)
+                return Promise.reject(res)
             })
             .catch((error) => {
-                console.error('Error:', error);
+                dispatch(updateUser('UPDATE_USER_FAILED',{type : 'error' , message : error}));
               });
 
     }

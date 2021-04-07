@@ -59,14 +59,19 @@ const reducer = (state = initialState, { type, payload }) => {
         return { employees: state.employees, alert: payload.alert };
 
         case "FIND_USER":
-          return { users: state.users, user: payload.user };
+         
+          return { users: state.users, user: payload.user};
     
         case "ADD_USER":
           return { users: state.users, message: payload.message };
 
-    case "UPDATE_USER":
-      console.log(payload.message);
-      return { updated : true, message: payload.message };
+    case "UPDATE_USER_SUCCESS":
+
+      return { updated : true, alert : payload.alert };
+
+      case "UPDATE_USER_FAILED":
+        
+        return { user : state.user, alert : payload.alert };
 
     default:
       return state;
