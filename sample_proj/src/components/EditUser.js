@@ -141,6 +141,8 @@ export default function EditUser({ match }) {
     domain: "",
     role: "",
     salary: "",
+    dob:"",
+    doj:""
   });
 
   const [firstName, setFirstName] = React.useState("");
@@ -218,11 +220,30 @@ export default function EditUser({ match }) {
   // },[values])
 
   const handleDobChange = (date) => {
+
+    let err = errors
+
     setDob(date);
+    
+    if(date!=null)
+    err.dob = date.toString()==='Invalid Date' ? date.toString() : ""
+    else
+    err.dob=""
+
+    setErrors(err)
   };
 
   const handleDojChange = (date) => {
+    let err = errors
+
     setDoj(date);
+    
+    if(date!=null)
+    err.doj = date.toString()==='Invalid Date' ? date.toString() : ""
+    else
+    err.doj = ""
+
+    setErrors(err)
   };
 
   const handleChange = (e) => {

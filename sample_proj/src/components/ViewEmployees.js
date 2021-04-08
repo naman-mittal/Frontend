@@ -145,8 +145,12 @@ export default function ViewEmployees() {
 
       // if(value==='')
       // setFilteredEmployees(employees)
+      
       // else
-      setFilteredEmployees(employees.filter(emp=> emp.empName.toLowerCase().match(new RegExp(`^${value}`)) ||  emp.empEmailId.toLowerCase().match(new RegExp(`^${value}`)) || emp.empDomain.toLowerCase().match(new RegExp(`^${value}`)) ))
+
+      // let list = employees.filter(emp => emp.empDomain!=null)
+
+      setFilteredEmployees(employees.filter(emp=> emp.empName.toLowerCase().match(new RegExp(`^${value}`)) ||  emp.empEmailId.toLowerCase().match(new RegExp(`^${value}`))  ))
 
       console.log(filteredEmployees)
 
