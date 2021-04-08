@@ -11,7 +11,7 @@ export default function Profile({match}){
     
 
         return (
-            <div className='profile'>
+            <div>
                 {console.log("param id = " + match.params.id)}
                 
                 <DataGrid viewId={match.params.id}></DataGrid>

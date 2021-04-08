@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
+//import AppBar from "@material-ui/core/AppBar";
+import AppBar from './AppBar'
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
@@ -18,17 +19,14 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import GroupIcon from "@material-ui/icons/Group";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import {
-  Link,
   Switch,
   useRouteMatch,
   Route,
-  useLocation,
   useHistory,
   NavLink,
 } from "react-router-dom";
 import MainDashboard from "./MainDashboard";
 import Profile from "./Profile";
-import Tabs from "@material-ui/core/Tabs";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import * as actions from "../actions/user";
@@ -36,14 +34,12 @@ import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import NoMatch from "./NoMatch";
 import EditUser from "./EditUser";
-import Modal from "@material-ui/core/Modal";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import ViewEmployees from "./ViewEmployees";
-import { history } from "../helpers/history";
 
 const drawerWidth = 180;
 
@@ -53,7 +49,7 @@ function Alert(props) {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
+   // display: "flex",
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -104,14 +100,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
     backgroundColor: "#f5f5f5",
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
-    [theme.breakpoints.down("xs")]: {
-      marginLeft: -(drawerWidth - 120),
-    },
+   
+   
   },
   contentShift: {
     transition: theme.transitions.create("margin", {
@@ -153,8 +143,7 @@ const useStyles = makeStyles((theme) => ({
   },
   active: {
     color: "blue",
-    borderRight : "2px solid blue",
-    
+    borderRight: "2px solid blue",
   },
 }));
 
@@ -164,7 +153,6 @@ export default function MainDrawer() {
   const user = JSON.parse(localStorage.getItem("user"));
 
   let { path, url } = useRouteMatch();
-  let location = useLocation();
 
   //const history = useHistory()
 
@@ -175,8 +163,6 @@ export default function MainDrawer() {
   //const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
-  const [value, setValue] = React.useState(0);
-
   const [openM, setOpenM] = React.useState(false);
 
   const [openSnack, setOpenSnack] = React.useState(false);
@@ -185,19 +171,9 @@ export default function MainDrawer() {
 
   useEffect(() => {
     if (alert) setOpenSnack(true);
-
-  }, []);
+  }, [alert]);
 
   const dispatch = useDispatch();
-
-  const handleChange = (newValue, navUrl) => {
-    console.log(newValue);
-    if (newValue === undefined) setValue(0);
-    else setValue(newValue);
-
-    // console.log("shifting to = " + navUrl)
-    // history.push(navUrl)
-  };
 
   const openModal = () => {
     setOpenM(true);
@@ -231,17 +207,6 @@ export default function MainDrawer() {
     setOpenSnack(false);
   };
 
-  // const body = (
-  //   <div  className={classes.paper}>
-  //     <h2 id="simple-modal-title">Logout</h2>
-  //     <p id="simple-modal-description">
-  //      Are you sure you want to logout?
-  //     </p>
-  //     <Button variant="contained"  onClick={handleLogout}><strong>Okay</strong></Button>
-  //     <Button className={classes.default} onClick={handleClose}>Cancel</Button>
-  //   </div>
-  // );
-
   return (
     <div className={classes.root}>
       <Snackbar
@@ -257,7 +222,8 @@ export default function MainDrawer() {
         </Alert>
       </Snackbar>
       <CssBaseline />
-      <AppBar
+      <AppBar/>
+      {/* <AppBar
         position="fixed"
         // className={clsx(classes.appBar, {
         //   [classes.appBarShift]: open,
@@ -305,8 +271,8 @@ export default function MainDrawer() {
             </DialogActions>
           </Dialog>
         </Toolbar>
-      </AppBar>
-      <Drawer
+      </AppBar> */}
+      {/* <Drawer
         className={classes.drawer}
         variant="persistent"
         anchor="left"
@@ -315,94 +281,15 @@ export default function MainDrawer() {
           paper: classes.drawerPaper,
         }}
       >
-        {/* <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </div> */}
-        {/* <Divider /> */}
         <div className={classes.drawerHeader} />
 
-        {/* <Link to="/" className='router-lnk'>
-
-        <ListItem button className={`drawertabs ${classes.active}`} onClick={handleClick}>
-              <ListItemIcon><DashboardIcon /></ListItemIcon>
-              <ListItemText className={classes.itemText} primary={'Dashboard'} />
-            </ListItem>
-
-        </Link>
-
-        <Link to="/profile" className='router-lnk'>
-
-        <ListItem button className='drawertabs'>
-              <ListItemIcon><AccountCircleIcon /></ListItemIcon>
-              <ListItemText className={classes.itemText} primary={'View Profile'} />
-            </ListItem>
-
-        </Link> */}
-
-        {/* <Tabs
-            value={value}
-            orientation="vertical"
-            variant="fullWidth"
-            indicatorColor="primary"
-            textColor="primary"
-            aria-label="icon label tabs example"
-          >
-            <Link to={`${url}`} className="router-lnk">
-            <ListItem
-              button
-              className={`drawertabs ${classes.active}`}
-              onClick={()=> handleChange(0,`${url}`)}
-            >
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText
-                className={classes.itemText}
-                primary={"Dashboard"}
-              />
-            </ListItem>
-          </Link>
-            
-          <Link to={`${url}/profile`} className="router-lnk">
-            <ListItem button className="drawertabs"
-            onClick={()=> handleChange(1,`${url}/profile`)}
-            >
-              <ListItemIcon>
-                <AccountCircleIcon />
-              </ListItemIcon>
-              <ListItemText
-                className={classes.itemText}
-                primary={"View Profile"}
-              />
-            </ListItem>
-          </Link>
-
-
-
-         {  user.roles[0]==='ROLE_ADMIN'  && <Link to={`${url}/employees`} className="router-lnk">
-            <ListItem button className="drawertabs"
-            onClick={()=> handleChange(2)}
-            >
-              <ListItemIcon>
-                <GroupIcon />
-              </ListItemIcon>
-              <ListItemText
-                className={classes.itemText}
-                primary={"Employees"}
-              />
-            </ListItem>
-          </Link>
-}
-
-          </Tabs> */}
-
-        <NavLink to={`${url}`} activeClassName={classes.active} exact className="router-lnk">
-          <ListItem
-            button
-            className="drawertabs"
-          >
+        <NavLink
+          to={`${url}`}
+          activeClassName={classes.active}
+          exact
+          className="router-lnk"
+        >
+          <ListItem button className="drawertabs">
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
@@ -410,11 +297,12 @@ export default function MainDrawer() {
           </ListItem>
         </NavLink>
 
-        <NavLink to={`${url}/profile`} activeClassName={classes.active}  className="router-lnk">
-          <ListItem
-            button
-            className="drawertabs"
-          >
+        <NavLink
+          to={`${url}/profile`}
+          activeClassName={classes.active}
+          className="router-lnk"
+        >
+          <ListItem button className="drawertabs">
             <ListItemIcon>
               <AccountCircleIcon />
             </ListItemIcon>
@@ -426,11 +314,12 @@ export default function MainDrawer() {
         </NavLink>
 
         {user.roles[0] === "ROLE_ADMIN" && (
-          <NavLink to={`${url}/employees`} activeClassName={classes.active}  className="router-lnk">
-            <ListItem
-              button
-              className="drawertabs"
-            >
+          <NavLink
+            to={`${url}/employees`}
+            activeClassName={classes.active}
+            className="router-lnk"
+          >
+            <ListItem button className="drawertabs">
               <ListItemIcon>
                 <GroupIcon />
               </ListItemIcon>
@@ -441,29 +330,9 @@ export default function MainDrawer() {
             </ListItem>
           </NavLink>
         )}
-
-        {/* <List> 
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text} className='drawertabs'>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List> */}
-      </Drawer>
+      </Drawer> */}
       <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
+        className={classes.content}
       >
         <div className={classes.drawerHeader} />
 

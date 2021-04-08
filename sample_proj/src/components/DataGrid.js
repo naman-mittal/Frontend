@@ -33,10 +33,10 @@ import NumberFormat from 'react-number-format';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+   // flexGrow: 1,
   },
   paper: {
-    flexGrow: 2,
+    //flexGrow: 2,
     padding: theme.spacing(2),
     textAlign: "left",
     color: theme.palette.text.primary,
@@ -137,7 +137,7 @@ export default function DataGrid(props) {
   // };
 
   return (
-    <div className={classes.root}>
+    <div>
       {/* {alert && (
         <Snackbar
           open={openSnack}
