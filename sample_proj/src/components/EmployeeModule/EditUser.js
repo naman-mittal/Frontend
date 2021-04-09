@@ -141,8 +141,8 @@ export default function EditUser({ match }) {
     domain: "",
     role: "",
     salary: "",
-    dob:"",
-    doj:""
+    dob: "",
+    doj: "",
   });
 
   const [firstName, setFirstName] = React.useState("");
@@ -220,30 +220,27 @@ export default function EditUser({ match }) {
   // },[values])
 
   const handleDobChange = (date) => {
-
-    let err = errors
+    let err = errors;
 
     setDob(date);
-    
-    if(date!=null)
-    err.dob = date.toString()==='Invalid Date' ? date.toString() : ""
-    else
-    err.dob=""
 
-    setErrors(err)
+    if (date != null)
+      err.dob = date.toString() === "Invalid Date" ? date.toString() : "";
+    else err.dob = "";
+
+    setErrors(err);
   };
 
   const handleDojChange = (date) => {
-    let err = errors
+    let err = errors;
 
     setDoj(date);
-    
-    if(date!=null)
-    err.doj = date.toString()==='Invalid Date' ? date.toString() : ""
-    else
-    err.doj = ""
 
-    setErrors(err)
+    if (date != null)
+      err.doj = date.toString() === "Invalid Date" ? date.toString() : "";
+    else err.doj = "";
+
+    setErrors(err);
   };
 
   const handleChange = (e) => {
@@ -423,35 +420,22 @@ export default function EditUser({ match }) {
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              {errors.firstName.length > 0 ? (
-                <TextField
-                  autoComplete="fname"
-                  name="firstName"
-                  variant="outlined"
-                  required
-                  error
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                  value={firstName}
-                  onChange={handleChange}
-                  helperText={errors.firstName}
-                />
-              ) : (
-                <TextField
-                  autoComplete="fname"
-                  name="firstName"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                  value={firstName}
-                  onChange={handleChange}
-                />
-              )}
+              <TextField
+                autoComplete="fname"
+                name="firstName"
+                variant="outlined"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
+                value={firstName}
+                onChange={handleChange}
+                {...(errors.firstName && {
+                  error: true,
+                  helperText: errors.firstName,
+                })}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
               {errors.lastName.length > 0 ? (
