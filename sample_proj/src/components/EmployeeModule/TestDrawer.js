@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
-//import AppBar from "@material-ui/core/AppBar";
 import AppBar from './AppBar'
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -18,6 +17,10 @@ import ListItemText from "@material-ui/core/ListItemText";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import GroupIcon from "@material-ui/icons/Group";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+
+import DataTable from '../ClaimsModule/DataTable'
+import AddClaim from '../ClaimsModule/AddClaim'
+
 import {
   Switch,
   useRouteMatch,
@@ -29,7 +32,7 @@ import MainDashboard from "./MainDashboard";
 import Profile from "./Profile";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import * as actions from "../actions/user";
+import * as actions from "../../actions/user";
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import NoMatch from "./NoMatch";
@@ -97,8 +100,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
   },
   content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
+   // flexGrow: 1,
+    padding: theme.spacing(2),
     backgroundColor: "#f5f5f5",
    
    
@@ -209,7 +212,7 @@ export default function MainDrawer() {
 
   return (
     <div className={classes.root}>
-      <Snackbar
+      {/* <Snackbar
         open={openSnack}
         autoHideDuration={6000}
         onClose={handleCloseSnack}
@@ -220,117 +223,12 @@ export default function MainDrawer() {
         >
           {alert ? alert.message : "sample"}
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
+
       <CssBaseline />
+
       <AppBar/>
-      {/* <AppBar
-        position="fixed"
-        // className={clsx(classes.appBar, {
-        //   [classes.appBarShift]: open,
-        // })}
-        className={classes.appBar}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawer}
-            edge="start"
-            // className={clsx(classes.menuButton, open && classes.hide)}
-            className={classes.menuButton}
-          >
-            {open ? <CloseIcon /> : <MenuIcon />}
-          </IconButton>
-          <Typography variant="h6">Expense Manager</Typography>
-          <Button
-            color="inherit"
-            className={classes.logoutBtn}
-            onClick={openModal}
-          >
-            Logout
-          </Button>
-          <Dialog
-            open={openM}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">{"Logout?"}</DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Are you sure you want to log out?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                <strong>Cancel</strong>
-              </Button>
-              <Button onClick={handleLogout} color="primary" autoFocus>
-                <strong>Logout</strong>
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </Toolbar>
-      </AppBar> */}
-      {/* <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.drawerHeader} />
-
-        <NavLink
-          to={`${url}`}
-          activeClassName={classes.active}
-          exact
-          className="router-lnk"
-        >
-          <ListItem button className="drawertabs">
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText className={classes.itemText} primary={"Dashboard"} />
-          </ListItem>
-        </NavLink>
-
-        <NavLink
-          to={`${url}/profile`}
-          activeClassName={classes.active}
-          className="router-lnk"
-        >
-          <ListItem button className="drawertabs">
-            <ListItemIcon>
-              <AccountCircleIcon />
-            </ListItemIcon>
-            <ListItemText
-              className={classes.itemText}
-              primary={"View Profile"}
-            />
-          </ListItem>
-        </NavLink>
-
-        {user.roles[0] === "ROLE_ADMIN" && (
-          <NavLink
-            to={`${url}/employees`}
-            activeClassName={classes.active}
-            className="router-lnk"
-          >
-            <ListItem button className="drawertabs">
-              <ListItemIcon>
-                <GroupIcon />
-              </ListItemIcon>
-              <ListItemText
-                className={classes.itemText}
-                primary={"Employees"}
-              />
-            </ListItem>
-          </NavLink>
-        )}
-      </Drawer> */}
+     
       <main
         className={classes.content}
       >
@@ -360,6 +258,10 @@ export default function MainDrawer() {
           />
 
           <PrivateRoute component={Profile} path={`${path}/profile`} exact />
+
+          <PrivateRoute component={DataTable} path={`${path}/claims`} exact />
+
+          <PrivateRoute component={AddClaim} path={`${path}/claims/add`} exact />
 
           <PrivateRoute
             component={EditUser}

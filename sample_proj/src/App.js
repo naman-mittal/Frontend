@@ -1,9 +1,9 @@
 import "./App.css";
-import Drawer from "./components/TestDrawer";
-import Signin from "./components/Signin";
-import Signup from './components/Signup'
-import PrivateRoute from "./components/PrivateRoute";
-import PublicRoute from "./components/PublicRoute";
+import Drawer from "./components/EmployeeModule/TestDrawer";
+import Signin from "./components/EmployeeModule/Signin";
+import Signup from './components/EmployeeModule/Signup'
+import PrivateRoute from "./components/EmployeeModule/PrivateRoute";
+import PublicRoute from "./components/EmployeeModule/PublicRoute";
 import {history} from './helpers/history'
 import {
   BrowserRouter as Router,
@@ -13,7 +13,7 @@ import {
   useLocation,
   useRouteMatch
 } from "react-router-dom";
-import NoMatch from "./components/NoMatch";
+import NoMatch from "./components/EmployeeModule/NoMatch";
 
 function App() {
   

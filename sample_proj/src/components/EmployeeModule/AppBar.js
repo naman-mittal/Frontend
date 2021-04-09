@@ -14,7 +14,8 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import RedeemIcon from "@material-ui/icons/Redeem";
 
 import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,7 +44,7 @@ import MainDashboard from "./MainDashboard";
 import Profile from "./Profile";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import * as actions from "../actions/user";
+import * as actions from "../../actions/user";
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import NoMatch from "./NoMatch";
@@ -118,33 +119,27 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
   },
-  icon : {
+  icon: {
+    color: "white",
+    margin: 10,
+    padding: theme.spacing(1),
 
-    color  :'white',
-    margin : 10,
-    padding : theme.spacing(1),
-    
     "&:hover": {
-        boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.2)',
-          transform: 'scale(1.05)',
-      },
-   
-
+      boxShadow: "0 8px 16px 0 rgba(0, 0, 0, 0.2)",
+      transform: "scale(1.05)",
+      cursor: "pointer",
+    },
   },
-  activeIcon : {
-
-    color : "pink",
-    boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.2)',
-    borderBottom : '2px solid pink',
-   
-
+  activeIcon: {
+    color: "pink",
+    boxShadow: "0 8px 16px 0 rgba(0, 0, 0, 0.2)",
+    borderBottom: "2px solid pink",
   },
-  activeMenu  :{
-
-    border : '2px solid blue',
-    color : 'white',
-
-  }
+  activeMenu: {
+    // border : '2px solid blue',
+    boxShadow: "8px 8px 16px 8px rgba(0, 0, 250, 0.2)",
+    color: "white",
+  },
 }));
 
 export default function PrimarySearchAppBar() {
@@ -152,13 +147,14 @@ export default function PrimarySearchAppBar() {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const history = useHistory()
+  const history = useHistory();
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -180,6 +176,14 @@ export default function PrimarySearchAppBar() {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -240,7 +244,7 @@ export default function PrimarySearchAppBar() {
           activeClassName={classes.activeMenu}
           className="router-lnk"
         >
-          <ListItem className="drawertabs"  onClick={handleMobileMenuClose}>
+          <ListItem className="drawertabs" onClick={handleMobileMenuClose}>
             <ListItemIcon>
               <AccountCircleIcon />
             </ListItemIcon>
@@ -259,7 +263,7 @@ export default function PrimarySearchAppBar() {
             activeClassName={classes.activeMenu}
             className="router-lnk"
           >
-            <ListItem className="drawertabs"  onClick={handleMobileMenuClose}>
+            <ListItem className="drawertabs" onClick={handleMobileMenuClose}>
               <ListItemIcon>
                 <GroupIcon />
               </ListItemIcon>
@@ -272,24 +276,58 @@ export default function PrimarySearchAppBar() {
         </MenuItem>
       )}
 
-<MenuItem>
-         
-            <ListItem className="drawertabs"  onClick={handleLogout}>
-              <ListItemIcon>
-                <ExitToAppIcon />
-              </ListItemIcon>
-              <ListItemText
-                className={classes.itemText}
-                primary={"Logout"}
-              />
-            </ListItem>
-        </MenuItem>
+      <MenuItem>
+        <NavLink
+          to={`${url}/claims`}
+          activeClassName={classes.activeMenu}
+          className="router-lnk"
+        >
+          <ListItem className="drawertabs" onClick={handleMobileMenuClose}>
+            <ListItemIcon>
+              <RedeemIcon />
+            </ListItemIcon>
+            <ListItemText
+              className={classes.itemText}
+              primary={"Expense Claims"}
+            />
+          </ListItem>
+        </NavLink>
+      </MenuItem>
 
+      <MenuItem>
+        <ListItem className="drawertabs" onClick={handleOpen}>
+          <ListItemIcon>
+            <ExitToAppIcon />
+          </ListItemIcon>
+          <ListItemText className={classes.itemText} primary={"Logout"} />
+        </ListItem>
+      </MenuItem>
     </Menu>
   );
 
   return (
     <div className={classes.grow}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Logout?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to log out?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            <strong>Cancel</strong>
+          </Button>
+          <Button onClick={handleLogout} color="primary" autoFocus>
+            <strong>Logout</strong>
+          </Button>
+        </DialogActions>
+      </Dialog>
       <AppBar>
         <Toolbar>
           {/* <IconButton
@@ -324,7 +362,7 @@ export default function PrimarySearchAppBar() {
               exact
               className={classes.icon}
             >
-              <DashboardIcon  />
+              <DashboardIcon />
             </NavLink>
 
             <NavLink
@@ -341,14 +379,23 @@ export default function PrimarySearchAppBar() {
                 activeClassName={classes.activeIcon}
                 className={classes.icon}
               >
-                <GroupIcon/>
+                <GroupIcon />
               </NavLink>
             )}
-            <div className={classes.icon} onClick={handleLogout}>
-            <ExitToAppIcon  />
+
+            <NavLink
+              to={`${url}/claims`}
+              activeClassName={classes.activeIcon}
+              className={classes.icon}
+            >
+              <RedeemIcon />
+            </NavLink>
+
+            <div className={classes.icon} onClick={handleOpen}>
+              <ExitToAppIcon />
             </div>
-</div>
-<div className={classes.sectionMobile}>
+          </div>
+          <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
               aria-controls={mobileMenuId}
@@ -358,7 +405,6 @@ export default function PrimarySearchAppBar() {
             >
               <MoreIcon />
             </IconButton>
-
           </div>
         </Toolbar>
       </AppBar>

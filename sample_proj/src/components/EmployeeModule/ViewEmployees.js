@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import * as actions from "../actions/user";
+import * as actions from "../../actions/user";
 import EmployeeCard from "./EmployeeCard";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "left",
     color: "white",
     backgroundColor: "#536dfe",
-    top: 63,
+    top: 67,
   },
   sticky: {
     position: "sticky",

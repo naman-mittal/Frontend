@@ -7,12 +7,16 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import reducer from './store/reducer'
 import claimReducer from './store/claimReducer'
+import projectReducer from './store/projectReducer'
+import expenseReducer from './store/expenseReducer'
 import { Provider } from 'react-redux';
 import {createLogger} from 'redux-logger'
 
 const combReducer = combineReducers({
   reducer,
-  claimReducer
+  claimReducer,
+  projectReducer,
+  expenseReducer
 })
 
 const loggerMiddleware = createLogger();

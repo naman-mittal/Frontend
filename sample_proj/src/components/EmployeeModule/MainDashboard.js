@@ -12,9 +12,9 @@ import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import GroupIcon from '@material-ui/icons/Group';
 import { fade, makeStyles } from "@material-ui/core/styles";
-import styles from "../assets/jss/material-dashboard-react/views/dashboardStyle.js";
-import * as actions from "../actions/claim";
-import * as userActions from "../actions/user";
+import styles from "../../assets/jss/material-dashboard-react/views/dashboardStyle.js";
+import * as actions from "../../actions/claim";
+import * as userActions from "../../actions/user";
 import {
   Link,
   Switch,

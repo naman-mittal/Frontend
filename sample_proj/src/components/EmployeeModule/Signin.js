@@ -1,7 +1,7 @@
 // import React from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import * as actions from "../actions/user";
+import * as actions from "../../actions/user";
 import Modal from "@material-ui/core/Modal";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
