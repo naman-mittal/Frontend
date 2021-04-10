@@ -136,7 +136,7 @@ export default function ViewProjects(props) {
 
   const [openSnack, setOpenSnack] = React.useState(false);
 
-  const [filteredProjects, setFilteredProjects] = React.useState(projects);
+  const [filteredProjects, setFilteredProjects] = React.useState([]);
 
   const dispatch = useDispatch();
 
@@ -171,7 +171,7 @@ export default function ViewProjects(props) {
   }, [projects]);
 
   useEffect(() => {
-    if (filteredProjects != null) {
+    if (filteredProjects != null ) {
       let list = filteredProjects.map((proj, i) => {
         return (
           <Grid key={proj.projectCode} item xs={12} sm={6} md={4}>
