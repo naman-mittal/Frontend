@@ -17,6 +17,8 @@ import NoMatch from "./NoMatch";
 import EditUser from "./EditUser";
 
 import ViewEmployees from "./ViewEmployees";
+import ViewProjects from "../ProjectModule/ViewProjects";
+import ViewExpenses from "../ExpenseModule/ViewExpenses";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,6 +105,18 @@ export default function MainDrawer() {
           <AdminRoute
             component={ViewEmployees}
             path={`${path}/employees`}
+            exact
+          />
+
+<AdminRoute
+            component={ViewProjects}
+            path={`${path}/projects`}
+            exact
+          />
+
+<AdminRoute
+            component={ViewExpenses}
+            path={`${path}/expenses`}
             exact
           />
 

@@ -204,6 +204,7 @@ export default function ViewExpenseClaims() {
   }, [alert]);
 
   const handleCloseSnack = () => {
+    dispatch({type : "RESET_ALERT", payload : {}})
     setOpenSnack(false);
   };
 

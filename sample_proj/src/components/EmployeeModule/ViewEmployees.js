@@ -14,7 +14,6 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: "sticky",
@@ -41,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
   },
   search: {
-     position: 'relative',
+    position: "relative",
     // float : 'right',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -68,7 +67,6 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     color: "inherit",
-   
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
@@ -103,15 +101,13 @@ export default function ViewEmployees() {
   }, []);
 
   useEffect(() => {
-    if(alert)
-    {
-      setOpenSnack(true)
+    if (alert) {
+      setOpenSnack(true);
     }
   }, [alert]);
 
   useEffect(() => {
     if (employees != null) {
-      
       setFilteredEmployees(employees);
     }
   }, [employees]);
@@ -127,7 +123,7 @@ export default function ViewEmployees() {
       });
       setEmployeeList(list);
     }
-  }, [filteredEmployees,employees]);
+  }, [filteredEmployees, employees]);
 
   if (employees == null) {
     return <h1>Loading...</h1>;
@@ -137,41 +133,49 @@ export default function ViewEmployees() {
   //   return <h1>No match found...</h1>;
   // }
 
-  const handleChange = (e) =>{
+  const handleChange = (e) => {
+    const { value } = e.target;
 
-      const {value} = e.target
+    console.log(value);
 
-      console.log(value)
+    // if(value==='')
+    // setFilteredEmployees(employees)
 
-      // if(value==='')
-      // setFilteredEmployees(employees)
-      
-      // else
+    // else
 
-      // let list = employees.filter(emp => emp.empDomain!=null)
+    // let list = employees.filter(emp => emp.empDomain!=null)
 
-      setFilteredEmployees(employees.filter(emp=> emp.empName.toLowerCase().match(new RegExp(`^${value}`)) ||  emp.empEmailId.toLowerCase().match(new RegExp(`^${value}`))  ))
+    setFilteredEmployees(
+      employees.filter(
+        (emp) =>
+          emp.empName.toLowerCase().match(new RegExp(`^${value}`)) ||
+          emp.empEmailId.toLowerCase().match(new RegExp(`^${value}`))
+      )
+    );
 
-      console.log(filteredEmployees)
-
-
-  }
-  const handleCloseSnack = ()=>{
-    console.log("closing snackbar...")
-    setOpenSnack(false)
-  }
+    console.log(filteredEmployees);
+  };
+  const handleCloseSnack = () => {
+    console.log("closing snackbar...");
+    setOpenSnack(false);
+  };
 
   return (
     <div>
-      {alert && <Snackbar
-              open={openSnack}
-              autoHideDuration={6000}
-              onClose={handleCloseSnack}
-            >
-              <Alert onClose={handleCloseSnack} severity={alert?alert.type:'success'}>
-                {alert ? alert.message : 'sample'}
-              </Alert>
-            </Snackbar>}
+      {alert && (
+        <Snackbar
+          open={openSnack}
+          autoHideDuration={6000}
+          onClose={handleCloseSnack}
+        >
+          <Alert
+            onClose={handleCloseSnack}
+            severity={alert ? alert.type : "success"}
+          >
+            {alert ? alert.message : "sample"}
+          </Alert>
+        </Snackbar>
+      )}
       <Paper className={classes.paper}>
         <Grid container spacing={3}>
           <Grid item xs={4} sm={5} md={4}>
@@ -184,8 +188,8 @@ export default function ViewEmployees() {
                 <SearchIcon />
               </div>
               <InputBase
-              onChange={handleChange}
-              name='searchTxt'
+                onChange={handleChange}
+                name="searchTxt"
                 placeholder="Search…"
                 classes={{
                   root: classes.inputRoot,
@@ -199,10 +203,13 @@ export default function ViewEmployees() {
       </Paper>
 
       {/* <div className={classes.drawerHeader} /> */}
-     { filteredEmployees && filteredEmployees.length===0 ? <h1>No match found...</h1>  : <Grid container spacing={3}>
-        {employeeList}
-        
-      </Grid>}
+      {filteredEmployees && filteredEmployees.length === 0 ? (
+        <h1>No match found...</h1>
+      ) : (
+        <Grid container spacing={3}>
+          {employeeList}
+        </Grid>
+      )}
     </div>
   );
 }

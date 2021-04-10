@@ -25,6 +25,9 @@ const claimReducer = (state = initialState, { type, payload }) => {
               alert: payload.alert,
           };
 
+          case "RESET_ALERT":
+            return { claims: state.claims };
+
       case "FIND_PROJECTS":
           return { claims: state.claims, projects: payload, expenses: state.expenses }
 

@@ -1,5 +1,7 @@
 import React from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
+import Tooltip from '@material-ui/core/Tooltip';
+import Zoom from '@material-ui/core/Zoom';
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -9,6 +11,8 @@ import Menu from "@material-ui/core/Menu";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import RedeemIcon from "@material-ui/icons/Redeem";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import { useDispatch } from "react-redux";
 import Button from "@material-ui/core/Button";
 import ListItem from "@material-ui/core/ListItem";
@@ -79,13 +83,13 @@ const useStyles = makeStyles((theme) => ({
   },
   sectionDesktop: {
     display: "none",
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       display: "flex",
     },
   },
   sectionMobile: {
     display: "flex",
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       display: "none",
     },
   },
@@ -240,15 +244,49 @@ export default function PrimarySearchAppBar() {
                 Employees
               </Grid>
             </Grid>
-            {/* <ListItem className="drawertabs" onClick={handleMobileMenuClose}>
-              <ListItemIcon>
-                
-              </ListItemIcon>
-              <ListItemText
-                className={classes.itemText}
-                primary={"Employees"}
-              />
-            </ListItem> */}
+            
+          </NavLink>
+        </MenuItem>
+      )}
+
+{user.roles[0] === "ROLE_ADMIN" && (
+        <MenuItem>
+          <NavLink
+            to={`${url}/projects`}
+            activeClassName={classes.activeMenu}
+            className="router-lnk"
+            onClick={handleMobileMenuClose}
+          >
+            <Grid container spacing={4} className={classes.menuItem}>
+              <Grid item xs={2}>
+                <AssignmentIcon />
+              </Grid>
+              <Grid item xs={4} style={{ marginLeft: "20px" }}>
+                Projects
+              </Grid>
+            </Grid>
+            
+          </NavLink>
+        </MenuItem>
+      )}
+
+{user.roles[0] === "ROLE_ADMIN" && (
+        <MenuItem>
+          <NavLink
+            to={`${url}/expenses`}
+            activeClassName={classes.activeMenu}
+            className="router-lnk"
+            onClick={handleMobileMenuClose}
+          >
+            <Grid container spacing={4} className={classes.menuItem}>
+              <Grid item xs={2}>
+                <AttachMoneyIcon />
+              </Grid>
+              <Grid item xs={4} style={{ marginLeft: "20px" }}>
+                Expenses
+              </Grid>
+            </Grid>
+            
           </NavLink>
         </MenuItem>
       )}
@@ -333,6 +371,7 @@ export default function PrimarySearchAppBar() {
           </div> */}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
+          <Tooltip title="Dashboard"  TransitionComponent={Zoom}  >
             <NavLink
               to={`${url}`}
               activeClassName={classes.activeIcon}
@@ -341,7 +380,8 @@ export default function PrimarySearchAppBar() {
             >
               <DashboardIcon />
             </NavLink>
-
+            </Tooltip>
+            <Tooltip title="Profile"  TransitionComponent={Zoom}  >
             <NavLink
               to={`${url}/profile`}
               activeClassName={classes.activeIcon}
@@ -349,8 +389,9 @@ export default function PrimarySearchAppBar() {
             >
               <AccountCircleIcon />
             </NavLink>
-
+            </Tooltip>
             {user.roles[0] === "ROLE_ADMIN" && (
+              <Tooltip title="Employees"  TransitionComponent={Zoom}  >
               <NavLink
                 to={`${url}/employees`}
                 activeClassName={classes.activeIcon}
@@ -358,8 +399,12 @@ export default function PrimarySearchAppBar() {
               >
                 <GroupIcon />
               </NavLink>
+              </Tooltip>
             )}
 
+
+
+<Tooltip title="Claims"  TransitionComponent={Zoom}  >
             <NavLink
               to={`${url}/claims`}
               activeClassName={classes.activeIcon}
@@ -367,10 +412,36 @@ export default function PrimarySearchAppBar() {
             >
               <RedeemIcon />
             </NavLink>
+              </Tooltip>
+            {user.roles[0] === "ROLE_ADMIN" && (
+              <Tooltip title="Projects"  TransitionComponent={Zoom}  >
+              <NavLink
+                to={`${url}/projects`}
+                activeClassName={classes.activeIcon}
+                className={classes.icon}
+              >
+                <AssignmentIcon />
+              </NavLink>
+              </Tooltip>
+            )}
 
+{user.roles[0] === "ROLE_ADMIN" && (
+              <Tooltip title="Expenses"  TransitionComponent={Zoom}  >
+              <NavLink
+                to={`${url}/expenses`}
+                activeClassName={classes.activeIcon}
+                className={classes.icon}
+              >
+                <AttachMoneyIcon />
+              </NavLink>
+              </Tooltip>
+            )}
+
+<Tooltip title="Logout"  TransitionComponent={Zoom}  >
             <div className={classes.icon} onClick={handleOpen}>
               <ExitToAppIcon />
             </div>
+            </Tooltip>
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
