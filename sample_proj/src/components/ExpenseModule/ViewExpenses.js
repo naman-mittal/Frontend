@@ -334,7 +334,7 @@ export default function ViewExpenses(props) {
           </Grid>
 
 {/*  */}
-<Grid className={classes.addIcon} item xs={1.5}>
+<Grid className={classes.addIcon} item >
             {/* <strong>Projects</strong> */}
       
       <Button variant="contained"   onClick={handleClickOpen}  startIcon={<AddIcon />}>
