@@ -183,9 +183,9 @@ export default function ViewProjects(props) {
     }
   }, [filteredProjects,projects]);
 
-  if (projects == null) {
-    return <h1>Loading...</h1>;
-  }
+  // if (projects == null) {
+  //   return <h1>No Project Found...</h1>;
+  // }
 
   
 

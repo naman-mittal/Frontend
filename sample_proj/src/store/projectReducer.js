@@ -28,7 +28,11 @@ const projectReducer = (state = initialState, { type, payload }) => {
 
     case "ADD_PROJECT":
       console.log(payload.project);
-      let list = [...state.projects, payload.project];
+      let list = []
+      if(state.projects)
+       list = [...state.projects, payload.project];
+       else
+       list = [payload.project]
       return { projects: list, alert: payload.alert, added: true };
     // return {projects : state.projects, message: payload.message};
 

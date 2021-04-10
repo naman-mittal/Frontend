@@ -23,7 +23,13 @@ const expenseReducer = (state = initialState, { type, payload }) => {
 //
         case "ADD_EXPENSE":
   
-          let list = [...state.expenses , payload.expense]
+
+        let list=[]
+
+        if(state.expenses)
+           list = [...state.expenses , payload.expense]
+           else
+           list = [payload.expense]
           return {expenses: list,alert:payload.alert,added:true};
 
       //

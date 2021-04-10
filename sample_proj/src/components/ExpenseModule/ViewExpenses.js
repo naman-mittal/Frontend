@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     width: "auto",
     textAlign: "left",
     color: "white",
-    backgroundColor: "#2874A6",
+    backgroundColor: "#536dfe",
     top: 66,
   },
   sticky: {
@@ -121,7 +121,7 @@ export default function ViewExpenses(props) {
 
   const [openSnack, setOpenSnack] = React.useState(false);
 
-  const [filteredExpenses, setFilteredExpenses] = React.useState(expenses);
+  const [filteredExpenses, setFilteredExpenses] = React.useState([]);
 
   const dispatch = useDispatch();
 
@@ -165,7 +165,7 @@ export default function ViewExpenses(props) {
   }, [added]);
 
   useEffect(() => {
-    if (filteredExpenses != null) {
+    if (filteredExpenses != null && filteredExpenses.length>0) {
       let list = filteredExpenses.map((exp, i) => {
         return (
           <Grid key={exp.expenseCode} item xs={12} sm={6} md={3}>
@@ -177,9 +177,9 @@ export default function ViewExpenses(props) {
     }
   }, [filteredExpenses,expenses]);
 
-  if (expenses == null) {
-    return <h1>Loading...</h1>;
-  }
+  // if (expenses == null) {
+  //   return <h1>No Expense Found...</h1>;
+  // }
 
   const handleChange = (e) =>{
 
@@ -397,7 +397,7 @@ export default function ViewExpenses(props) {
       </Paper> 
 
        {/* <div className={classes.drawerHeader} />  */}
-       { filteredExpenses && filteredExpenses.length===0 ? <h1>No match found...</h1>  : <Grid container spacing={3}>
+       { filteredExpenses && filteredExpenses.length===0 ? <h1>No Expense found...</h1>  : <Grid container spacing={3}>
         {expenseList}
        
         

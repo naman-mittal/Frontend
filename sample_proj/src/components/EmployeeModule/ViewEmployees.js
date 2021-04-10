@@ -91,7 +91,7 @@ export default function ViewEmployees() {
 
   const [openSnack, setOpenSnack] = React.useState(false);
 
-  const [filteredEmployees, setFilteredEmployees] = React.useState(employees);
+  const [filteredEmployees, setFilteredEmployees] = React.useState([]);
 
   const dispatch = useDispatch();
 
@@ -204,7 +204,7 @@ export default function ViewEmployees() {
 
       {/* <div className={classes.drawerHeader} /> */}
       {filteredEmployees && filteredEmployees.length === 0 ? (
-        <h1>No match found...</h1>
+        <h1>No Employee found...</h1>
       ) : (
         <Grid container spacing={3}>
           {employeeList}

@@ -181,7 +181,9 @@ export default function MainDashboard() {
           <DataTable claims={claims} />
         </Grid>
       ) : (
+        <Grid item xs={12}>
         <h3>No Expense Claims</h3>
+        </Grid>
       )}
     </Grid>
   );
