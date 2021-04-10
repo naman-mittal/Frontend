@@ -322,7 +322,7 @@ export default function EditUser({ match }) {
       } else {
         setSalary(value);
 
-        err.salary = value.length >= 4 ? "" : "should be greater than 1000";
+        err.salary = value.indexOf('-')===-1 ?  value.length >= 4 ? "" : "should be greater than 1000" : "Cannot be negative";
       }
     }
 
@@ -438,20 +438,7 @@ export default function EditUser({ match }) {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              {errors.lastName.length > 0 ? (
-                <TextField
-                  variant="outlined"
-                  required
-                  error
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  value={lastName}
-                  onChange={handleChange}
-                  helperText={errors.lastName}
-                />
-              ) : (
+              
                 <TextField
                   variant="outlined"
                   required
@@ -461,26 +448,15 @@ export default function EditUser({ match }) {
                   name="lastName"
                   value={lastName}
                   onChange={handleChange}
+                  {...(errors.lastName && {
+                  error: true,
+                  helperText: errors.lastName,
+                })}
                 />
-              )}
             </Grid>
 
             <Grid item xs={12}>
-              {errors.email.length > 0 ? (
-                <TextField
-                  variant="outlined"
-                  required
-                  error
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={handleChange}
-                  helperText={errors.email}
-                />
-              ) : (
+              
                 <TextField
                   variant="outlined"
                   required
@@ -491,27 +467,14 @@ export default function EditUser({ match }) {
                   autoComplete="email"
                   value={email}
                   onChange={handleChange}
+                  {...(errors.email && {
+                  error: true,
+                  helperText: errors.email,
+                })}
                 />
-              )}
             </Grid>
 
             <Grid item xs={12}>
-              {errors.pan.length > 0 ? (
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  error
-                  name="pan"
-                  label="PAN"
-                  type="pan"
-                  id="pan"
-                  autoComplete="pan"
-                  value={pan}
-                  onChange={handleChange}
-                  helperText={errors.pan}
-                />
-              ) : (
                 <TextField
                   variant="outlined"
                   required
@@ -523,8 +486,12 @@ export default function EditUser({ match }) {
                   autoComplete="pan"
                   value={pan}
                   onChange={handleChange}
+                  {...(errors.pan && {
+                  error: true,
+                  helperText: errors.pan,
+                })}
                 />
-              )}
+        
             </Grid>
             <Grid item xs={12}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -545,19 +512,7 @@ export default function EditUser({ match }) {
 
             {loginUser.roles.includes("ROLE_ADMIN") && (
               <Grid item xs={12}>
-                {errors.designation.length > 0 ? (
-                  <TextField
-                    variant="outlined"
-                    required
-                    error
-                    fullWidth
-                    label="Designation"
-                    name="designation"
-                    value={designation}
-                    onChange={handleChange}
-                    helperText={errors.designation}
-                  />
-                ) : (
+                
                   <TextField
                     variant="outlined"
                     required
@@ -566,26 +521,18 @@ export default function EditUser({ match }) {
                     name="designation"
                     value={designation}
                     onChange={handleChange}
+                    {...(errors.designation && {
+                  error: true,
+                  helperText: errors.designation,
+                })}
                   />
-                )}
+              
               </Grid>
             )}
 
             {loginUser.roles.includes("ROLE_ADMIN") && (
               <Grid item xs={12} sm={6}>
-                {errors.domain.length > 0 ? (
-                  <TextField
-                    variant="outlined"
-                    required
-                    fullWidth
-                    error
-                    label="Domain"
-                    name="domain"
-                    value={domain}
-                    onChange={handleChange}
-                    helperText={errors.domain}
-                  />
-                ) : (
+               
                   <TextField
                     variant="outlined"
                     required
@@ -594,26 +541,17 @@ export default function EditUser({ match }) {
                     name="domain"
                     value={domain}
                     onChange={handleChange}
+                    {...(errors.domain && {
+                  error: true,
+                  helperText: errors.domain,
+                })}
                   />
-                )}
               </Grid>
             )}
 
             {loginUser.roles.includes("ROLE_ADMIN") && (
               <Grid item xs={12} sm={6}>
-                {errors.role.length > 0 ? (
-                  <TextField
-                    variant="outlined"
-                    required
-                    error
-                    fullWidth
-                    label="Role"
-                    name="role"
-                    value={role}
-                    onChange={handleChange}
-                    helperText={errors.role}
-                  />
-                ) : (
+                
                   <TextField
                     variant="outlined"
                     required
@@ -622,8 +560,11 @@ export default function EditUser({ match }) {
                     name="role"
                     value={role}
                     onChange={handleChange}
+                    {...(errors.role && {
+                  error: true,
+                  helperText: errors.role,
+                })}
                   />
-                )}
               </Grid>
             )}
 
@@ -648,22 +589,7 @@ export default function EditUser({ match }) {
 
             {loginUser.roles.includes("ROLE_ADMIN") && (
               <Grid item xs={12}>
-                {errors.salary.length > 0 ? (
-                  <TextField
-                    variant="outlined"
-                    required
-                    error
-                    fullWidth
-                    label="Salary"
-                    name="salary"
-                    value={salary}
-                    onChange={handleChange}
-                    InputProps={{
-                      inputComponent: NumberFormatCustom,
-                    }}
-                    helperText={errors.salary}
-                  />
-                ) : (
+                
                   <TextField
                     variant="outlined"
                     required
@@ -675,13 +601,16 @@ export default function EditUser({ match }) {
                     InputProps={{
                       inputComponent: NumberFormatCustom,
                     }}
+                    {...(errors.salary && {
+                  error: true,
+                  helperText: errors.salary,
+                })}
                   />
-                )}
+              
               </Grid>
             )}
           </Grid>
           <Button
-            // fullWidth
             variant="contained"
             color="primary"
             className={classes.cancel}
@@ -691,7 +620,6 @@ export default function EditUser({ match }) {
           </Button>
           <Button
             type="submit"
-            // fullWidth
             variant="contained"
             color="primary"
             className={classes.update}
@@ -699,17 +627,9 @@ export default function EditUser({ match }) {
             Update
           </Button>
         </form>
-        {/* <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="/signin" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid> */}
+        
       </div>
-      {/* <Box mt={5}>
-        <Copyright />
-      </Box> */}
+     
     </Container>
   );
 }

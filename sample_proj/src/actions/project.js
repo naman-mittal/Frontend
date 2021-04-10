@@ -1,11 +1,14 @@
 import {portNumber} from '../helpers/port'
-const user = JSON.parse(localStorage.getItem('user'));
+
 
 export const findProjects = (projects) => {
     return { type: "FIND_PROJECTS", payload : {projects} }
   }
   
   export const fetchProjects = () => {
+
+    const user = JSON.parse(localStorage.getItem('user'));
+
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' ,'Authorization': 'Bearer ' + user.accessToken}

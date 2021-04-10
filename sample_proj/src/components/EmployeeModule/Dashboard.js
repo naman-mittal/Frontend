@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import DataTable from "./DataTable";
 import Grid from "@material-ui/core/Grid";
@@ -11,17 +11,14 @@ import ErrorIcon from "@material-ui/icons/Error";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import GroupIcon from '@material-ui/icons/Group';
-import { fade, makeStyles } from "@material-ui/core/styles";
+import {  makeStyles } from "@material-ui/core/styles";
 import styles from "../../assets/jss/material-dashboard-react/views/dashboardStyle.js";
 import * as actions from "../../actions/claim";
 import * as userActions from "../../actions/user";
 import {
   Link,
-  Switch,
   useRouteMatch,
-  Route,
-  useLocation,
-  useHistory,
+ 
 } from "react-router-dom";
 
 const useStyles = makeStyles(styles);
@@ -31,7 +28,7 @@ export default function MainDashboard() {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  let { path, url } = useRouteMatch();
+  let {  url } = useRouteMatch();
 
   const dispatch = useDispatch();
 
@@ -40,7 +37,7 @@ export default function MainDashboard() {
   const claims = useSelector((state) => state.claimReducer.claims);
 
   const [pending, setPending] = React.useState(0);
-  const [total, setTotal] = React.useState(0);
+  
 
   const [claimedAmount, setClaimedAmount] = React.useState(0);
 
@@ -53,14 +50,13 @@ export default function MainDashboard() {
     else dispatch(actions.fetchClaims());
 
     dispatch(userActions.fetchEmployees());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (claims != null) {
       let sum = 0;
 
       console.log(claims);
-      setTotal(claims.length);
 
       let list = claims.map((claim) => claim.project.title);
 
@@ -88,9 +84,9 @@ export default function MainDashboard() {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={8} sm={6} md={4}>
+      <Grid item xs={8} sm={6} md={4} >
         {user.roles.includes("ROLE_ADMIN") ? (
-          <Card>
+          <Card >
             <CardHeader color="warning" stats icon>
               <CardIcon color="info">
                 <GroupIcon />

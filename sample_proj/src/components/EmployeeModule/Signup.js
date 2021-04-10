@@ -3,8 +3,8 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import Link from "@material-ui/core/Link";
@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
+    color: "#fff",
   },
 }));
 
@@ -80,8 +80,8 @@ export default function SignUp() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-  const [openSnack, setOpenSnack] = React.useState(false)
-  const [open, setOpen] = React.useState(false)
+  const [openSnack, setOpenSnack] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const [errors, setErrors] = React.useState({
     email: "",
@@ -92,9 +92,9 @@ export default function SignUp() {
     lastName: "",
   });
 
-  const alert = useSelector(state => state.reducer.alert)
+  const alert = useSelector((state) => state.reducer.alert);
 
-  const signedUp = useSelector(state => state.reducer.signedUp)
+  const signedUp = useSelector((state) => state.reducer.signedUp);
 
   const history = useHistory();
 
@@ -126,22 +126,13 @@ export default function SignUp() {
     } else if (name === "password") {
       setPassword(value);
 
-    
-
       err.password =
         value.length >= 8 ? "" : "Password must be 8 character long";
-    }
-    else if (name === "confirmPassword") {
-      
-      setConfirmPassword(value)
+    } else if (name === "confirmPassword") {
+      setConfirmPassword(value);
 
-      
-
-        err.confirmPassword = value.localeCompare(password)===0 ? "" : "Password doesn't match"
-
-      
-
-     
+      err.confirmPassword =
+        value.localeCompare(password) === 0 ? "" : "Password doesn't match";
     }
 
     setErrors(err);
@@ -153,17 +144,14 @@ export default function SignUp() {
     // let err = errors
 
     // err.confirmPassword = confirmPassword!==password ? "Password doesn't match" : ""
-    
+
     // setErrors(err)
 
     if (validateForm(errors)) {
       console.log("signing up....");
 
-      if(firstName&&lastName&&username&&email&&password)
-      {
-
-
-        setOpen(true)
+      if (firstName && lastName && username && email && password) {
+        setOpen(true);
         const signupRequest = {
           name: firstName + " " + lastName,
           email: email,
@@ -171,53 +159,46 @@ export default function SignUp() {
           password: password,
         };
         dispatch(actions.signUp(signupRequest));
+      } else {
+        window.alert("Fields cannot be null");
       }
-      else
-      {
-        window.alert('Fields cannot be null')
-      }
-
-      
     } else {
-      console.error("Invalid Form");
+      window.alert("Invalid Form");
     }
   };
 
   useEffect(() => {
-    
-    if(signedUp)
-    {
+    if (signedUp) {
       history.push("/signin");
     }
-
-  },[signedUp,history]);
+  }, [signedUp, history]);
 
   useEffect(() => {
-
-    if(alert)
-    {
-      setOpen(false)
-      setOpenSnack(true)
+    if (alert) {
+      setOpen(false);
+      setOpenSnack(true);
     }
-  
-    },[alert]);
+  }, [alert]);
 
-    const handleCloseSnack = () =>{
-      setOpenSnack(false)
-    }
+  const handleCloseSnack = () => {
+    setOpenSnack(false);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
-       <Snackbar
-              open={openSnack}
-              autoHideDuration={6000}
-              onClose={handleCloseSnack}
-            >
-              <Alert onClose={handleCloseSnack} severity={alert?alert.type:'success'}>
-                {alert ? alert.message : 'sample'}
-              </Alert>
-            </Snackbar>
-            <Backdrop className={classes.backdrop} open={open} >
+      <Snackbar
+        open={openSnack}
+        autoHideDuration={6000}
+        onClose={handleCloseSnack}
+      >
+        <Alert
+          onClose={handleCloseSnack}
+          severity={alert ? alert.type : "success"}
+        >
+          {alert ? alert.message : "sample"}
+        </Alert>
+      </Snackbar>
+      <Backdrop className={classes.backdrop} open={open}>
         <CircularProgress color="inherit" />
       </Backdrop>
       <CssBaseline />
@@ -231,176 +212,102 @@ export default function SignUp() {
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              {errors.firstName.length > 0 ? (
-                <TextField
-                  autoComplete="fname"
-                  error
-                  name="firstName"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                  onChange={handleChange}
-                  helperText={errors.firstName}
-                />
-              ) : (
-                <TextField
-                  autoComplete="fname"
-                  name="firstName"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                  onChange={handleChange}
-                />
-              )}
+              <TextField
+                autoComplete="fname"
+                name="firstName"
+                variant="outlined"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
+                onChange={handleChange}
+                {...(errors.firstName && {
+                  error: true,
+                  helperText: errors.firstName,
+                })}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
-              {errors.lastName.length > 0 ? (
-                <TextField
-                  variant="outlined"
-                  error
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="lname"
-                  onChange={handleChange}
-                  helperText={errors.lastName}
-                />
-              ) : (
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="lname"
-                  onChange={handleChange}
-                />
-              )}
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="lname"
+                onChange={handleChange}
+                {...(errors.lastName && {
+                  error: true,
+                  helperText: errors.lastName,
+                })}
+              />
             </Grid>
 
             <Grid item xs={12}>
-              {errors.email.length > 0 ? (
-                <TextField
-                  variant="outlined"
-                  required
-                  error
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  onChange={handleChange}
-                  helperText={errors.email}
-                />
-              ) : (
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  onChange={handleChange}
-                />
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              {errors.username.length > 0 ? (
-                <TextField
-                  variant="outlined"
-                  required
-                  error
-                  fullWidth
-                  id="username"
-                  label="Username"
-                  name="username"
-                  //autoComplete="username"
-                  onChange={handleChange}
-                  helperText={errors.username}
-                />
-              ) : (
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="username"
-                  label="Username"
-                  name="username"
-                  //autoComplete="username"
-                  onChange={handleChange}
-                />
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              {errors.password.length > 0 ? (
-                <TextField
-                  variant="outlined"
-                  required
-                  error
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  onChange={handleChange}
-                  helperText={errors.password}
-                />
-              ) : (
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  onChange={handleChange}
-                />
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              {errors.confirmPassword.length > 0 ? (
-                <TextField
-                  variant="outlined"
-                  required
-                  error
-                  fullWidth
-                  name="confirmPassword"
-                  label="Confirm Password"
-                  type="password"
-                  onChange={handleChange}
-                  helperText={errors.confirmPassword}
-                />
-              ) : (
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="confirmPassword"
-                  label="Confirm Password"
-                  type="password"
-                  onChange={handleChange}
-                />
-              )}
-            </Grid>
-            {/* <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                onChange={handleChange}
+                {...(errors.email && {
+                  error: true,
+                  helperText: errors.email,
+                })}
               />
-            </Grid> */}
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                onChange={handleChange}
+                {...(errors.username && {
+                  error: true,
+                  helperText: errors.username,
+                })}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                onChange={handleChange}
+                {...(errors.password && {
+                  error: true,
+                  helperText: errors.password,
+                })}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                onChange={handleChange}
+                {...(errors.confirmPassword && {
+                  error: true,
+                  helperText: errors.confirmPassword,
+                })}
+              />
+            </Grid>
           </Grid>
           <Button
             type="submit"
@@ -420,9 +327,6 @@ export default function SignUp() {
           </Grid>
         </Grid>
       </div>
-      {/* <Box mt={5}>
-        <Copyright />
-      </Box> */}
     </Container>
   );
 }

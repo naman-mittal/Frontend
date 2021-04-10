@@ -4,57 +4,27 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
-import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import RedeemIcon from "@material-ui/icons/Redeem";
-
-import clsx from "clsx";
-import { useDispatch, useSelector } from "react-redux";
-
-import Drawer from "@material-ui/core/Drawer";
-import CssBaseline from "@material-ui/core/CssBaseline";
-//import AppBar from "@material-ui/core/AppBar";
-
+import { useDispatch } from "react-redux";
 import Button from "@material-ui/core/Button";
-
-import CloseIcon from "@material-ui/icons/Close";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import GroupIcon from "@material-ui/icons/Group";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import {
-  Switch,
-  useRouteMatch,
-  Route,
-  useHistory,
-  NavLink,
-} from "react-router-dom";
-import MainDashboard from "./MainDashboard";
-import Profile from "./Profile";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+import { useRouteMatch, useHistory, NavLink } from "react-router-dom";
 import * as actions from "../../actions/user";
-import PrivateRoute from "./PrivateRoute";
-import AdminRoute from "./AdminRoute";
-import NoMatch from "./NoMatch";
-import EditUser from "./EditUser";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import ViewEmployees from "./ViewEmployees";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -135,15 +105,20 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "0 8px 16px 0 rgba(0, 0, 0, 0.2)",
     borderBottom: "2px solid pink",
   },
+
+  menuItem: {
+    marginLeft: theme.spacing(0),
+  },
+
   activeMenu: {
     // border : '2px solid blue',
-    boxShadow: "8px 8px 16px 8px rgba(0, 0, 250, 0.2)",
-    color: "white",
+    // boxShadow: "8px 8px 16px 8px rgba(0, 0, 250, 0.2)",
+    color: "violet",
   },
 }));
 
 export default function PrimarySearchAppBar() {
-  let { path, url } = useRouteMatch();
+  let { url } = useRouteMatch();
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -163,10 +138,6 @@ export default function PrimarySearchAppBar() {
     dispatch(actions.logout());
 
     history.push("/signin");
-  };
-
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
   };
 
   const handleMobileMenuClose = () => {
@@ -218,24 +189,21 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        {/* <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p> */}
         <NavLink
           to={`${url}`}
           activeClassName={classes.activeMenu}
           exact
           className="router-lnk"
+          onClick={handleMobileMenuClose}
         >
-          <ListItem className="drawertabs" onClick={handleMobileMenuClose}>
-            <ListItemIcon>
+          <Grid container spacing={4} className={classes.menuItem}>
+            <Grid item xs={2}>
               <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText className={classes.itemText} primary={"Dashboard"} />
-          </ListItem>
+            </Grid>
+            <Grid item xs={4} style={{ marginLeft: "20px" }}>
+              Dashboard
+            </Grid>
+          </Grid>
         </NavLink>
       </MenuItem>
       <MenuItem>
@@ -243,16 +211,16 @@ export default function PrimarySearchAppBar() {
           to={`${url}/profile`}
           activeClassName={classes.activeMenu}
           className="router-lnk"
+          onClick={handleMobileMenuClose}
         >
-          <ListItem className="drawertabs" onClick={handleMobileMenuClose}>
-            <ListItemIcon>
+          <Grid container spacing={4} className={classes.menuItem}>
+            <Grid item xs={2}>
               <AccountCircleIcon />
-            </ListItemIcon>
-            <ListItemText
-              className={classes.itemText}
-              primary={"View Profile"}
-            />
-          </ListItem>
+            </Grid>
+            <Grid item xs={4} style={{ marginLeft: "20px" }}>
+              View Profile
+            </Grid>
+          </Grid>
         </NavLink>
       </MenuItem>
 
@@ -262,16 +230,25 @@ export default function PrimarySearchAppBar() {
             to={`${url}/employees`}
             activeClassName={classes.activeMenu}
             className="router-lnk"
+            onClick={handleMobileMenuClose}
           >
-            <ListItem className="drawertabs" onClick={handleMobileMenuClose}>
-              <ListItemIcon>
+            <Grid container spacing={4} className={classes.menuItem}>
+              <Grid item xs={2}>
                 <GroupIcon />
+              </Grid>
+              <Grid item xs={4} style={{ marginLeft: "20px" }}>
+                Employees
+              </Grid>
+            </Grid>
+            {/* <ListItem className="drawertabs" onClick={handleMobileMenuClose}>
+              <ListItemIcon>
+                
               </ListItemIcon>
               <ListItemText
                 className={classes.itemText}
                 primary={"Employees"}
               />
-            </ListItem>
+            </ListItem> */}
           </NavLink>
         </MenuItem>
       )}
@@ -281,16 +258,16 @@ export default function PrimarySearchAppBar() {
           to={`${url}/claims`}
           activeClassName={classes.activeMenu}
           className="router-lnk"
+          onClick={handleMobileMenuClose}
         >
-          <ListItem className="drawertabs" onClick={handleMobileMenuClose}>
-            <ListItemIcon>
+          <Grid container spacing={4} className={classes.menuItem}>
+            <Grid item xs={2}>
               <RedeemIcon />
-            </ListItemIcon>
-            <ListItemText
-              className={classes.itemText}
-              primary={"Expense Claims"}
-            />
-          </ListItem>
+            </Grid>
+            <Grid item xs={4} style={{ marginLeft: "20px" }}>
+              Expense Claims
+            </Grid>
+          </Grid>
         </NavLink>
       </MenuItem>
 

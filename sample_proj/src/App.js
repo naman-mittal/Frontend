@@ -1,29 +1,23 @@
 import "./App.css";
-import Drawer from "./components/EmployeeModule/TestDrawer";
+import Drawer from "./components/EmployeeModule/Drawer";
 import Signin from "./components/EmployeeModule/Signin";
 import Signup from './components/EmployeeModule/Signup'
 import PrivateRoute from "./components/EmployeeModule/PrivateRoute";
 import PublicRoute from "./components/EmployeeModule/PublicRoute";
-import {history} from './helpers/history'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
-  useLocation,
-  useRouteMatch
+  Redirect
 } from "react-router-dom";
 import NoMatch from "./components/EmployeeModule/NoMatch";
 
 function App() {
   
-  //let { path, url } = useRouteMatch();
-
   return (
     <div>
       <Router>
         <Switch>
-          {/* <PublicRoute restricted={false} component={Home} path="/" exact /> */}
           <Route
             exact
             path="/"
@@ -45,8 +39,6 @@ function App() {
           </Route>
         </Switch>
       </Router>
-      {/* <Drawer/> */}
-      {/* <Signin/> */}
     </div>
   );
 }

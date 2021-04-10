@@ -1,4 +1,5 @@
 import {projectManagers} from '../helpers/sampleData'
+import {portNumber} from '../helpers/port'
 
 
 const findUser = (user) =>{
@@ -20,7 +21,7 @@ export const fetchUser = (id) => {
     }
     };
     return dispatch => {
-        fetch('http://localhost:8080/api/v1/employee/'+id, requestOptions)
+        fetch(`http://localhost:${portNumber}/api/v1/employee/`+id, requestOptions)
             .then(res => {
                 console.log(res);
                 return res.json();
@@ -57,7 +58,7 @@ export const editUser = (updateRequest) => {
     };
     return dispatch => {
         let code = 0
-        fetch('http://localhost:8080/api/v1/employee', requestOptions)
+        fetch(`http://localhost:${portNumber}/api/v1/employee`, requestOptions)
             .then(res => {
                 console.log(res);
                 code = res.status
@@ -99,7 +100,7 @@ export const deleteUser = (id) => {
     }
     };
     return dispatch => {
-        fetch('http://localhost:8080/api/v1/employee/'+id, requestOptions)
+        fetch(`http://localhost:${portNumber}/api/v1/employee/`+id, requestOptions)
             .then(res => {
                 console.log(res);
                 if(res.status!==204)
@@ -134,7 +135,7 @@ export const fetchEmployees = () => {
     }
     };
     return dispatch => {
-        fetch('http://localhost:8080/api/v1/employees', requestOptions)
+        fetch(`http://localhost:${portNumber}/api/v1/employees`, requestOptions)
             .then(res => {
                 console.log(res);
                 return res.json();
@@ -173,7 +174,7 @@ export const login = (username,password) => {
 
        
 
-        fetch('http://localhost:8080/api/v1/signin', requestOptions)
+        fetch(`http://localhost:${portNumber}/api/v1/signin`, requestOptions)
             .then(res => {
                 console.log(res);
                 //console.log(res.message);
@@ -229,22 +230,13 @@ export const signUp = (user) => {
 
        let code = 0
 
-        fetch('http://localhost:8080/api/v1/signup', requestOptions)
+        fetch(`http://localhost:${portNumber}/api/v1/signup`, requestOptions)
             .then(res => {
                 console.log(res);
                 //console.log(res.message);
                 code = res.status
                 if(res.status!==200)
                 {
-
-                  // let result = res.text()
-                //    result.then(res=>{
-                //     return res   
-                //    })
-                    // return Promise.reject( result.then(res=>{
-                    //     return res   
-                    //    }));
-
                        return res.text()
                 }
                 
@@ -254,12 +246,6 @@ export const signUp = (user) => {
                 
     
                 console.log(res);
-
-
-                
-                
-                    //console.log("no error")
-                    //localStorage.setItem('user',JSON.stringify(user))
                 if(code===200)
                 dispatch(signup());
                 else

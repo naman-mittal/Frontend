@@ -22,7 +22,7 @@ export default function Card(props) {
     [className]: className !== undefined
   });
   return (
-    <div className={cardClasses} {...rest}>
+    <div style={{boxShadow: "0 8px 16px 0 rgba(0, 0, 0, 0.2)"}} className={cardClasses} {...rest}>
       {children}
     </div>
   );

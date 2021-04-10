@@ -27,10 +27,6 @@ import { deepPurple } from "@material-ui/core/colors";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import NumberFormat from 'react-number-format';
 
-// function Alert(props) {
-//   return <MuiAlert elevation={6} variant="filled" {...props} />;
-// }
-
 const useStyles = makeStyles((theme) => ({
   root: {
    // flexGrow: 1,
@@ -89,17 +85,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function DataGrid(props) {
-  let { path, url } = useRouteMatch();
+  let { path} = useRouteMatch();
 
   const history = useHistory();
 
   const user = useSelector((state) => state.reducer.user);
-
-  const alert = useSelector((state) => state.reducer.alert);
-
-  // const [openSnack, setOpenSnack] = React.useState(false);
-
-  // const loginUser = JSON.parse(localStorage.getItem("user"));
 
   const dispatch = useDispatch();
 
@@ -110,15 +100,10 @@ export default function DataGrid(props) {
 
     let loginUser = JSON.parse(localStorage.getItem("user"));
     let id = props.viewId ? props.viewId : loginUser.id;
-    //if(loginUser)
     dispatch(actions.fetchUser(id));
   }, []);
 
-  // useEffect(() => {
-  //   if (alert) {
-  //     setOpenSnack(true);
-  //   }
-  // }, [alert]);
+  
 
   if (user == null || user.loginDetails === undefined) {
     return <CircularProgress className={classes.centerAlign} />;
