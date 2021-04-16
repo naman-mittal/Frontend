@@ -217,7 +217,7 @@ export default function ViewExpenses(props) {
       }
     } 
       else {
-        console.error("Invalid Form");
+        window.alert("Invalid Form");
       }  
     
     // setOpen2(false)     //This is a call to close dialog box
@@ -363,7 +363,7 @@ export default function ViewExpenses(props) {
             })}
           />
           <TextField
-            autoFocus
+          
             margin="dense"
             id="description"
             label="Description"

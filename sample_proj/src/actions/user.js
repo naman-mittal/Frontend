@@ -193,10 +193,7 @@ export const login = (username,password) => {
                     console.log("no error")
                     localStorage.setItem('user',JSON.stringify(user))
                     //history.push('/')
-                dispatch(signin(user));
-
-                
-                
+                dispatch(signin(user));        
                 
             })
             .catch((error) => {

@@ -315,7 +315,7 @@ export default function ExpenseCard(props) {
           <Grid item xs={12}>
         <Typography className={classes.subTitle} display='inline'>
           
-         Description : 
+        <strong>Description : </strong>
          </Typography> 
          </Grid>  
 
